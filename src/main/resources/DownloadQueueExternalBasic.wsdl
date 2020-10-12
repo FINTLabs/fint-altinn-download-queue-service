@@ -1,0 +1,1016 @@
+<wsdl:definitions name="DownloadQueueExternalBasic" targetNamespace="http://www.altinn.no/services/Archive/DownloadQueue/2012/08"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
+    xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex"
+    xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy"
+    xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract"
+    xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+    xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:tns="http://www.altinn.no/services/Archive/DownloadQueue/2012/08"
+    xmlns:wsa10="http://www.w3.org/2005/08/addressing"
+    xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+    xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing">
+    <wsp:Policy wsu:Id="BasicHttpBinding_IDownloadQueueExternalBasic_policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <wsoma:OptimizedMimeSerialization xmlns:wsoma="http://schemas.xmlsoap.org/ws/2004/09/policy/optimizedmimeserialization"></wsoma:OptimizedMimeSerialization>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsdl:types>
+        <xs:schema elementFormDefault="qualified" targetNamespace="http://www.altinn.no/services/2009/10"
+            xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            xmlns:tns="http://www.altinn.no/services/2009/10">
+            <xs:element name="Test">
+                <xs:complexType>
+                    <xs:sequence></xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="TestResponse">
+                <xs:complexType>
+                    <xs:sequence></xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/"
+            xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/">
+            <xs:element name="anyType" nillable="true" type="xs:anyType"></xs:element>
+            <xs:element name="anyURI" nillable="true" type="xs:anyURI"></xs:element>
+            <xs:element name="base64Binary" nillable="true" type="xs:base64Binary"></xs:element>
+            <xs:element name="boolean" nillable="true" type="xs:boolean"></xs:element>
+            <xs:element name="byte" nillable="true" type="xs:byte"></xs:element>
+            <xs:element name="dateTime" nillable="true" type="xs:dateTime"></xs:element>
+            <xs:element name="decimal" nillable="true" type="xs:decimal"></xs:element>
+            <xs:element name="double" nillable="true" type="xs:double"></xs:element>
+            <xs:element name="float" nillable="true" type="xs:float"></xs:element>
+            <xs:element name="int" nillable="true" type="xs:int"></xs:element>
+            <xs:element name="long" nillable="true" type="xs:long"></xs:element>
+            <xs:element name="QName" nillable="true" type="xs:QName"></xs:element>
+            <xs:element name="short" nillable="true" type="xs:short"></xs:element>
+            <xs:element name="string" nillable="true" type="xs:string"></xs:element>
+            <xs:element name="unsignedByte" nillable="true" type="xs:unsignedByte"></xs:element>
+            <xs:element name="unsignedInt" nillable="true" type="xs:unsignedInt"></xs:element>
+            <xs:element name="unsignedLong" nillable="true" type="xs:unsignedLong"></xs:element>
+            <xs:element name="unsignedShort" nillable="true" type="xs:unsignedShort"></xs:element>
+            <xs:element name="char" nillable="true" type="tns:char"></xs:element>
+            <xs:simpleType name="char">
+                <xs:restriction base="xs:int"></xs:restriction>
+            </xs:simpleType>
+            <xs:element name="duration" nillable="true" type="tns:duration"></xs:element>
+            <xs:simpleType name="duration">
+                <xs:restriction base="xs:duration">
+                    <xs:pattern value="\-?P(\d*D)?(T(\d*H)?(\d*M)?(\d*(\.\d*)?S)?)?"></xs:pattern>
+                    <xs:minInclusive value="-P10675199DT2H48M5.4775808S"></xs:minInclusive>
+                    <xs:maxInclusive value="P10675199DT2H48M5.4775807S"></xs:maxInclusive>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:element name="guid" nillable="true" type="tns:guid"></xs:element>
+            <xs:simpleType name="guid">
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="[\da-fA-F]{8}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{12}"></xs:pattern>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:attribute name="FactoryType" type="xs:QName"></xs:attribute>
+            <xs:attribute name="Id" type="xs:ID"></xs:attribute>
+            <xs:attribute name="Ref" type="xs:IDREF"></xs:attribute>
+        </xs:schema>
+        <xs:schema elementFormDefault="qualified" targetNamespace="http://www.altinn.no/services/common/fault/2009/10"
+            xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            xmlns:tns="http://www.altinn.no/services/common/fault/2009/10">
+            <xs:complexType name="AltinnFault">
+                <xs:annotation>
+                    <xs:appinfo></xs:appinfo>
+                    <xs:documentation>&lt;summary&gt;
+            Represents a SOAP fault message used by Altinn to convey exception information to the caller.
+            &lt;/summary&gt;</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="AltinnErrorMessage" nillable="true" type="xs:string">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the error message.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="AltinnExtendedErrorMessage" nillable="true" type="xs:string">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the verbose version of the error message.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="AltinnLocalizedErrorMessage" nillable="true" type="xs:string">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the localized version of the error message.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="ErrorGuid" nillable="true" type="xs:string">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the unique GUID for the specific fault.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="ErrorID" type="xs:int">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the error type id.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="UserGuid" nillable="true" type="xs:string">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the GUID of the user.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="UserId" nillable="true" type="xs:string">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the id of the user.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="AltinnFault" nillable="true" type="tns:AltinnFault"></xs:element>
+        </xs:schema>
+        <xs:schema elementFormDefault="qualified" targetNamespace="http://www.altinn.no/services/Archive/DownloadQueue/2012/08"
+            xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:import namespace="http://schemas.altinn.no/services/Archive/ReporteeArchive/2012/08"></xs:import>
+            <xs:import namespace="http://schemas.altinn.no/services/Archive/DownloadQueue/2012/08"></xs:import>
+            <xs:element name="GetArchivedFormTaskBasicDQ">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="systemUserName" nillable="true" type="xs:string"></xs:element>
+                        <xs:element minOccurs="0" name="systemPassword" nillable="true" type="xs:string"></xs:element>
+                        <xs:element minOccurs="0" name="archiveReference" nillable="true" type="xs:string"></xs:element>
+                        <xs:element minOccurs="0" name="languageID" nillable="true" type="xs:int"></xs:element>
+                        <xs:element minOccurs="0" name="includeXmlNamespace" type="xs:boolean"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetArchivedFormTaskBasicDQResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="GetArchivedFormTaskBasicDQResult" nillable="true" type="q1:ArchivedFormTaskDQBE"
+                            xmlns:q1="http://schemas.altinn.no/services/Archive/ReporteeArchive/2012/08"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetDownloadQueueItems">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="systemUserName" nillable="true" type="xs:string"></xs:element>
+                        <xs:element minOccurs="0" name="systemPassword" nillable="true" type="xs:string"></xs:element>
+                        <xs:element minOccurs="0" name="serviceCode" nillable="true" type="xs:string"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetDownloadQueueItemsResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="GetDownloadQueueItemsResult" nillable="true" type="q2:DownloadQueueItemBEList"
+                            xmlns:q2="http://schemas.altinn.no/services/Archive/DownloadQueue/2012/08"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="PurgeItem">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="systemUserName" nillable="true" type="xs:string"></xs:element>
+                        <xs:element minOccurs="0" name="systemPassword" nillable="true" type="xs:string"></xs:element>
+                        <xs:element minOccurs="0" name="archiveReference" nillable="true" type="xs:string"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="PurgeItemResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="PurgeItemResult" nillable="true" type="xs:string"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetFormSetPdfBasic">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="1" name="systemName" type="xs:string"></xs:element>
+                        <xs:element minOccurs="1" name="systemPassword" type="xs:string"></xs:element>
+                        <xs:element minOccurs="1" name="archiveReference" type="xs:string"></xs:element>
+                        <xs:element minOccurs="1" name="languageId" type="xs:int"></xs:element>
+                        <xs:element minOccurs="0" name="dataFormatId" nillable="true" type="xs:string"></xs:element>
+                        <xs:element minOccurs="0" name="dataFormatVersion" nillable="true" type="xs:int"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetFormSetPdfBasicResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="GetFormSetPdfBasicResult" nillable="true" type="xs:base64Binary"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema elementFormDefault="qualified" targetNamespace="http://schemas.altinn.no/services/Archive/ReporteeArchive/2012/08"
+            xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            xmlns:tns="http://schemas.altinn.no/services/Archive/ReporteeArchive/2012/08">
+            <xs:import namespace="http://schemas.altinn.no/services/Archive/DownloadQueue/2012/08"></xs:import>
+            <xs:import namespace="http://schemas.datacontract.org/2004/07/Altinn.Common.SBL.Enums.Archive"></xs:import>
+            <xs:complexType name="ArchivedFormTaskDQBE">
+                <xs:annotation>
+                    <xs:appinfo></xs:appinfo>
+                    <xs:documentation>&lt;summary&gt;
+            Represent an archived form task for download queue.
+            &lt;/summary&gt;</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="Approvers" nillable="true" type="tns:ApproverListDQBE">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets list of approvers.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="ArchiveReference" nillable="true" type="xs:string">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the archive reference for the archived form task. 
+            Archive reference is reportee element id with letters 'AR' added.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="ArchiveTimeStamp" type="xs:dateTime">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets date and time when the form task was archived.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="Attachments" nillable="true" type="tns:ArchivedAttachmentExternalListDQBE">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets list of archived attachments for archived form task.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="AttachmentsInResponse" type="xs:int">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the number of attachments in the form task.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="CaseID" type="xs:int">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the case id for collaboration.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="CorrelationReference" type="xs:long">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the correlation reference.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="Forms" nillable="true" type="tns:ArchivedFormListDQBE">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets list of archived forms in the archived form task.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="FormsInResponse" type="xs:int">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the number of forms in the form task.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="Reportee" nillable="true" type="xs:string">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets reportee for the archived form task.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="SOEncryptedSymmetricKey" nillable="true" type="q1:SOEncryptedSymmetricKeyExternalDQBE"
+                        xmlns:q1="http://schemas.altinn.no/services/Archive/DownloadQueue/2012/08">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets symmetrical key for service owner encryption.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="ServiceCode" nillable="true" type="xs:string">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the external service code.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="ServiceEditionCode" nillable="true" type="xs:string">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the external service edition code.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ArchivedFormTaskDQBE" nillable="true" type="tns:ArchivedFormTaskDQBE"></xs:element>
+            <xs:complexType name="ApproverListDQBE">
+                <xs:annotation>
+                    <xs:appinfo></xs:appinfo>
+                    <xs:documentation>&lt;summary&gt;
+            Represents a strongly typed collection of ApproverDQBE
+            &lt;/summary&gt;</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" name="ApproverDQBE" nillable="true" type="tns:ApproverDQBE"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ApproverListDQBE" nillable="true" type="tns:ApproverListDQBE"></xs:element>
+            <xs:complexType name="ApproverDQBE">
+                <xs:annotation>
+                    <xs:appinfo></xs:appinfo>
+                    <xs:documentation>&lt;summary&gt;
+            Represents limited signature data
+            &lt;/summary&gt;</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="ApprovedTimeStamp" type="xs:dateTime">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the approved time stamp.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="ApproverID" nillable="true" type="xs:string">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the userID of the approver.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="SecurityLevel" type="q2:ApproverSecurityLevel"
+                        xmlns:q2="http://schemas.datacontract.org/2004/07/Altinn.Common.SBL.Enums.Archive">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the security level. The security level is the AuthenticationLevel.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ApproverDQBE" nillable="true" type="tns:ApproverDQBE"></xs:element>
+            <xs:complexType name="ArchivedAttachmentExternalListDQBE">
+                <xs:annotation>
+                    <xs:appinfo></xs:appinfo>
+                    <xs:documentation>&lt;summary&gt;
+            Represents a strongly typed collection of ArchivedAttachmentDQBE
+            &lt;/summary&gt;</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" name="ArchivedAttachmentDQBE" nillable="true" type="tns:ArchivedAttachmentDQBE"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ArchivedAttachmentExternalListDQBE" nillable="true" type="tns:ArchivedAttachmentExternalListDQBE"></xs:element>
+            <xs:complexType name="ArchivedAttachmentDQBE">
+                <xs:annotation>
+                    <xs:appinfo></xs:appinfo>
+                    <xs:documentation>&lt;summary&gt;
+            Represents data for archived attachment for download queue.
+            &lt;/summary&gt;</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="ArchiveReference" nillable="true" type="xs:string">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the archive reference of the attachment.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="AttachmentData" nillable="true" type="xs:base64Binary">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the attachment data.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="AttachmentType" nillable="true" type="xs:string">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the type of the attachment.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="FileName" nillable="true" type="xs:string">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the filename of the attachment.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="IsEncrypted" type="xs:boolean">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets a value indicating whether the attachment is encrypted or not.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="AttachmentId" type="xs:int">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the the unique id of the attachment in Altinn.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="AttachmentTypeName" nillable="true" type="xs:string">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the technical name of the attachment rule associated with the attachment.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="AttachmentTypeNameLanguage" nillable="true" type="xs:string">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the translated name of the attachment rule associated with the attachment.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ArchivedAttachmentDQBE" nillable="true" type="tns:ArchivedAttachmentDQBE"></xs:element>
+            <xs:complexType name="ArchivedFormListDQBE">
+                <xs:annotation>
+                    <xs:appinfo></xs:appinfo>
+                    <xs:documentation>&lt;summary&gt;
+            Represents a strongly typed collection of ArchivedFormDQBE
+            &lt;/summary&gt;</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" name="ArchivedFormDQBE" nillable="true" type="tns:ArchivedFormDQBE"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ArchivedFormListDQBE" nillable="true" type="tns:ArchivedFormListDQBE"></xs:element>
+            <xs:complexType name="ArchivedFormDQBE">
+                <xs:annotation>
+                    <xs:appinfo></xs:appinfo>
+                    <xs:documentation>&lt;summary&gt;
+            Represents data for archived form for download queue.
+            &lt;/summary&gt;</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="DataFormatID" nillable="true" type="xs:string">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets identifier for the data format.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="DataFormatVersionID" type="xs:int">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets version of data format.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="FormData" nillable="true" type="xs:string">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the form data XML.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="ParentReference" nillable="true" type="xs:string">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the parent information of the form.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="Reference" nillable="true" type="xs:string">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets identifier used to identify FormID.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ArchivedFormDQBE" nillable="true" type="tns:ArchivedFormDQBE"></xs:element>
+        </xs:schema>
+        <xs:schema elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Altinn.Common.SBL.Enums.Archive"
+            xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            xmlns:tns="http://schemas.datacontract.org/2004/07/Altinn.Common.SBL.Enums.Archive">
+            <xs:simpleType name="ApproverSecurityLevel">
+                <xs:annotation>
+                    <xs:appinfo></xs:appinfo>
+                    <xs:documentation>&lt;summary&gt;
+            Specifies different authentication levels of a signee or approver.
+            &lt;/summary&gt;</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="selfIdentifiedUser">
+                        <xs:annotation>
+                            <xs:documentation>&lt;summary&gt;
+            Specifies that signee was self identified.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="notSensitive">
+                        <xs:annotation>
+                            <xs:documentation>&lt;summary&gt;
+            Specifies that signee had authentication level for data with no sensitivity.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="lessSensitive">
+                        <xs:annotation>
+                            <xs:documentation>&lt;summary&gt;
+            Specifies that signee had authentication level for data with less sensitivity.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="sensitive">
+                        <xs:annotation>
+                            <xs:documentation>&lt;summary&gt;
+            Specifies that signee had authentication level for data that are sensitive.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="verySensitive">
+                        <xs:annotation>
+                            <xs:documentation>&lt;summary&gt;
+            Specifies that signee had authentication level for data with high sensitivity.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:element name="ApproverSecurityLevel" nillable="true" type="tns:ApproverSecurityLevel"></xs:element>
+            <xs:simpleType name="DownloadQueueReporteeType">
+                <xs:annotation>
+                    <xs:appinfo></xs:appinfo>
+                    <xs:documentation>&lt;summary&gt;
+            Specifies different reportee types.
+            &lt;/summary&gt;</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Organisation">
+                        <xs:annotation>
+                            <xs:documentation>&lt;summary&gt;
+            Reportee is an organization.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Person">
+                        <xs:annotation>
+                            <xs:documentation>&lt;summary&gt;
+            Reportee is a person.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                    <xs:enumeration value="Selfregistereduser">
+                        <xs:annotation>
+                            <xs:documentation>&lt;summary&gt;
+            Reportee is a self identified user.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:enumeration>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:element name="DownloadQueueReporteeType" nillable="true" type="tns:DownloadQueueReporteeType"></xs:element>
+        </xs:schema>
+        <xs:schema elementFormDefault="qualified" targetNamespace="http://schemas.altinn.no/services/Archive/DownloadQueue/2012/08"
+            xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            xmlns:tns="http://schemas.altinn.no/services/Archive/DownloadQueue/2012/08">
+            <xs:import namespace="http://schemas.datacontract.org/2004/07/Altinn.Common.SBL.Enums.Archive"></xs:import>
+            <xs:import namespace="http://schemas.altinn.no/services/Archive/DownloadQueue/2019/01"></xs:import>
+            <xs:complexType name="SOEncryptedSymmetricKeyExternalDQBE">
+                <xs:annotation>
+                    <xs:appinfo></xs:appinfo>
+                    <xs:documentation>&lt;summary&gt;
+            Represents data contract for key management instances for external usage.
+            &lt;/summary&gt;</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="CertificateThumbprint" nillable="true" type="xs:string">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the thumb print for the certificate used for decryption
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="EncryptedKey" nillable="true" type="xs:base64Binary">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the AES crypto key
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="SOEncryptedSymmetricKeyExternalDQBE" nillable="true" type="tns:SOEncryptedSymmetricKeyExternalDQBE"></xs:element>
+            <xs:complexType name="DownloadQueueItemBEList">
+                <xs:annotation>
+                    <xs:appinfo></xs:appinfo>
+                    <xs:documentation>&lt;summary&gt;
+            Represents a strongly typed collection of DownloadQueueItemExternalBE.
+            &lt;/summary&gt;</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" name="DownloadQueueItemBE" nillable="true" type="tns:DownloadQueueItemBE"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="DownloadQueueItemBEList" nillable="true" type="tns:DownloadQueueItemBEList"></xs:element>
+            <xs:complexType name="DownloadQueueItemBE">
+                <xs:annotation>
+                    <xs:appinfo></xs:appinfo>
+                    <xs:documentation>&lt;summary&gt;
+            Represents item in download queue.
+            &lt;/summary&gt;</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="ArchiveReference" nillable="true" type="xs:string">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the archive reference for the item.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="ArchivedDate" type="xs:dateTime">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the date and time when the item was archived.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="ReporteeID" nillable="true" type="xs:string">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the unique identifier of the reportee for the item..
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="ReporteeType" type="q1:DownloadQueueReporteeType"
+                        xmlns:q1="http://schemas.datacontract.org/2004/07/Altinn.Common.SBL.Enums.Archive">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the reportee type for the item.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="ServiceCode" nillable="true" type="xs:string">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets service code for for the item.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="ServiceEditionCode" type="xs:int">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets service edition code for the item.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="ShipmentMetadataList" nillable="true" type="q2:ArchivedShipmentMetadataList"
+                        xmlns:q2="http://schemas.altinn.no/services/Archive/DownloadQueue/2019/01">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the shipment metadata for the archived form.
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="DownloadQueueItemBE" nillable="true" type="tns:DownloadQueueItemBE"></xs:element>
+        </xs:schema>
+        <xs:schema elementFormDefault="qualified" targetNamespace="http://schemas.altinn.no/services/Archive/DownloadQueue/2019/01"
+            xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            xmlns:tns="http://schemas.altinn.no/services/Archive/DownloadQueue/2019/01">
+            <xs:complexType name="ArchivedShipmentMetadataList">
+                <xs:annotation>
+                    <xs:appinfo></xs:appinfo>
+                    <xs:documentation>&lt;summary&gt;
+            Represents a strongly typed collection of ArchivedShipmentMetadataBE
+            &lt;/summary&gt;</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" name="ArchivedShipmentMetadata" nillable="true" type="tns:ArchivedShipmentMetadata"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ArchivedShipmentMetadataList" nillable="true" type="tns:ArchivedShipmentMetadataList"></xs:element>
+            <xs:complexType name="ArchivedShipmentMetadata">
+                <xs:annotation>
+                    <xs:appinfo></xs:appinfo>
+                    <xs:documentation>&lt;summary&gt;
+            Represents a single key/value pair of shipment metadata from form task.
+            &lt;/summary&gt;</xs:documentation>
+                </xs:annotation>
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="Key" nillable="true" type="xs:string">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the ShipmentMetadata key
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="Value" nillable="true" type="xs:string">
+                        <xs:annotation>
+                            <xs:appinfo></xs:appinfo>
+                            <xs:documentation>&lt;summary&gt;
+            Gets or sets the ShipmentMetadata value
+            &lt;/summary&gt;</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="ArchivedShipmentMetadata" nillable="true" type="tns:ArchivedShipmentMetadata"></xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="IDownloadQueueExternalBasic_Test_InputMessage">
+        <wsdl:part name="parameters" element="q1:Test"
+            xmlns:q1="http://www.altinn.no/services/2009/10"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="IDownloadQueueExternalBasic_Test_OutputMessage">
+        <wsdl:part name="parameters" element="q2:TestResponse"
+            xmlns:q2="http://www.altinn.no/services/2009/10"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="IDownloadQueueExternalBasic_Test_AltinnFaultFault_FaultMessage">
+        <wsdl:part name="detail" element="q3:AltinnFault"
+            xmlns:q3="http://www.altinn.no/services/common/fault/2009/10"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="IDownloadQueueExternalBasic_GetArchivedFormTaskBasicDQ_InputMessage">
+        <wsdl:part name="parameters" element="tns:GetArchivedFormTaskBasicDQ"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="IDownloadQueueExternalBasic_GetArchivedFormTaskBasicDQ_OutputMessage">
+        <wsdl:part name="parameters" element="tns:GetArchivedFormTaskBasicDQResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="IDownloadQueueExternalBasic_GetArchivedFormTaskBasicDQ_AltinnFaultFault_FaultMessage">
+        <wsdl:part name="detail" element="q4:AltinnFault"
+            xmlns:q4="http://www.altinn.no/services/common/fault/2009/10"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="IDownloadQueueExternalBasic_GetDownloadQueueItems_InputMessage">
+        <wsdl:part name="parameters" element="tns:GetDownloadQueueItems"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="IDownloadQueueExternalBasic_GetDownloadQueueItems_OutputMessage">
+        <wsdl:part name="parameters" element="tns:GetDownloadQueueItemsResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="IDownloadQueueExternalBasic_GetDownloadQueueItems_AltinnFaultFault_FaultMessage">
+        <wsdl:part name="detail" element="q5:AltinnFault"
+            xmlns:q5="http://www.altinn.no/services/common/fault/2009/10"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="IDownloadQueueExternalBasic_PurgeItem_InputMessage">
+        <wsdl:part name="parameters" element="tns:PurgeItem"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="IDownloadQueueExternalBasic_PurgeItem_OutputMessage">
+        <wsdl:part name="parameters" element="tns:PurgeItemResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="IDownloadQueueExternalBasic_PurgeItem_AltinnFaultFault_FaultMessage">
+        <wsdl:part name="detail" element="q6:AltinnFault"
+            xmlns:q6="http://www.altinn.no/services/common/fault/2009/10"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="IDownloadQueueExternalBasic_GetFormSetPdfBasic_InputMessage">
+        <wsdl:part name="parameters" element="tns:GetFormSetPdfBasic"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="IDownloadQueueExternalBasic_GetFormSetPdfBasic_OutputMessage">
+        <wsdl:part name="parameters" element="tns:GetFormSetPdfBasicResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="IDownloadQueueExternalBasic_GetFormSetPdfBasic_AltinnFaultFault_FaultMessage">
+        <wsdl:part name="detail" element="q7:AltinnFault"
+            xmlns:q7="http://www.altinn.no/services/common/fault/2009/10"></wsdl:part>
+    </wsdl:message>
+    <wsdl:portType name="IDownloadQueueExternalBasic">
+        <wsdl:documentation>&lt;summary&gt;
+            This contract defines the external basic binding contract for DownloadQueueExternalBasic service.
+            &lt;/summary&gt;</wsdl:documentation>
+        <wsdl:operation name="Test">
+            <wsdl:input wsaw:Action="http://www.altinn.no/services/2009/10/IAltinnContractBase/Test" message="tns:IDownloadQueueExternalBasic_Test_InputMessage"></wsdl:input>
+            <wsdl:output wsaw:Action="http://www.altinn.no/services/2009/10/IAltinnContractBase/TestResponse" message="tns:IDownloadQueueExternalBasic_Test_OutputMessage"></wsdl:output>
+            <wsdl:fault wsaw:Action="http://www.altinn.no/services/2009/10/IAltinnContractBase/TestAltinnFaultFault" name="AltinnFaultFault" message="tns:IDownloadQueueExternalBasic_Test_AltinnFaultFault_FaultMessage"></wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="GetArchivedFormTaskBasicDQ">
+            <wsdl:documentation>&lt;summary&gt;
+            Retrieve an ArchivedFormTaskBE object containing all forms and attachments
+            for the specific form task based on the reportee elementId provided.
+            &lt;/summary&gt;
+            &lt;remarks&gt;
+            This operation is versioned as V2 as it contains some additional information. Preferred over Get Archived Form Task Basic.
+            &lt;/remarks&gt;
+            &lt;param name="systemUserName"&gt;
+            System user name is the relevant agency system name that is registered in Altinn - mandatory parameter
+            &lt;/param&gt;
+            &lt;param name="systemPassword"&gt;
+            System password is the password for the corresponding registered agency system - mandatory parameter
+            &lt;/param&gt;
+            &lt;param name="archiveReference"&gt;
+            Identifier for a Reportee Element to get, this consists of the letters "AR" followed by the ReporteeElementID -
+            mandatory parameter
+            &lt;/param&gt;
+            &lt;param name="languageID"&gt;
+            Localization Language (English 1033, Bokmål 1044, Nynorsk 2068) - optional parameter
+            &lt;/param&gt;
+            &lt;param name="includeXmlNamespace"&gt;
+            true if the user wants my fields and corresponding namespace in the form data. 
+            Defaults to false - optional parameter
+            &lt;/param&gt;
+            &lt;returns&gt;
+            Archived Form Task entity
+            &lt;/returns&gt;</wsdl:documentation>
+            <wsdl:input wsaw:Action="http://www.altinn.no/services/Archive/DownloadQueue/2012/08/IDownloadQueueExternalBasic/GetArchivedFormTaskBasicDQ" message="tns:IDownloadQueueExternalBasic_GetArchivedFormTaskBasicDQ_InputMessage"></wsdl:input>
+            <wsdl:output wsaw:Action="http://www.altinn.no/services/Archive/DownloadQueue/2012/08/IDownloadQueueExternalBasic/GetArchivedFormTaskBasicDQResponse" message="tns:IDownloadQueueExternalBasic_GetArchivedFormTaskBasicDQ_OutputMessage"></wsdl:output>
+            <wsdl:fault wsaw:Action="http://www.altinn.no/services/Archive/DownloadQueue/2012/08/IDownloadQueueExternalBasic/GetArchivedFormTaskBasicDQAltinnFaultFault" name="AltinnFaultFault" message="tns:IDownloadQueueExternalBasic_GetArchivedFormTaskBasicDQ_AltinnFaultFault_FaultMessage"></wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="GetDownloadQueueItems">
+            <wsdl:documentation>&lt;summary&gt;
+            Gets a list of up to 500 DownloadQueue items. Filters based on serviceCode.
+            &lt;/summary&gt;
+            &lt;param name="systemUserName"&gt;
+            contains the system User Name
+            &lt;/param&gt;
+            &lt;param name="systemPassword"&gt;
+            contains the system password.
+            &lt;/param&gt;
+            &lt;param name="serviceCode"&gt;
+            The service code that you want to filter DownloadQueue items by. - Optional parameter
+            &lt;/param&gt;
+            &lt;returns&gt;
+            A list of up to 500 DownloadQueue items.
+            &lt;/returns&gt;</wsdl:documentation>
+            <wsdl:input wsaw:Action="http://www.altinn.no/services/Archive/DownloadQueue/2012/08/IDownloadQueueExternalBasic/GetDownloadQueueItems" message="tns:IDownloadQueueExternalBasic_GetDownloadQueueItems_InputMessage"></wsdl:input>
+            <wsdl:output wsaw:Action="http://www.altinn.no/services/Archive/DownloadQueue/2012/08/IDownloadQueueExternalBasic/GetDownloadQueueItemsResponse" message="tns:IDownloadQueueExternalBasic_GetDownloadQueueItems_OutputMessage"></wsdl:output>
+            <wsdl:fault wsaw:Action="http://www.altinn.no/services/Archive/DownloadQueue/2012/08/IDownloadQueueExternalBasic/GetDownloadQueueItemsAltinnFaultFault" name="AltinnFaultFault" message="tns:IDownloadQueueExternalBasic_GetDownloadQueueItems_AltinnFaultFault_FaultMessage"></wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="PurgeItem">
+            <wsdl:documentation>&lt;summary&gt;
+            Marks DownloadQueue item as Purged.
+            &lt;/summary&gt;
+            &lt;param name="systemUserName"&gt;
+            contains the system User Name
+            &lt;/param&gt;
+            &lt;param name="systemPassword"&gt;
+            contains the system password.
+            &lt;/param&gt;
+            &lt;param name="archiveReference"&gt;
+            Archive reference
+            &lt;/param&gt;
+            &lt;returns&gt;
+            Purge item as string
+            &lt;/returns&gt;</wsdl:documentation>
+            <wsdl:input wsaw:Action="http://www.altinn.no/services/Archive/DownloadQueue/2012/08/IDownloadQueueExternalBasic/PurgeItem" message="tns:IDownloadQueueExternalBasic_PurgeItem_InputMessage"></wsdl:input>
+            <wsdl:output wsaw:Action="http://www.altinn.no/services/Archive/DownloadQueue/2012/08/IDownloadQueueExternalBasic/PurgeItemResponse" message="tns:IDownloadQueueExternalBasic_PurgeItem_OutputMessage"></wsdl:output>
+            <wsdl:fault wsaw:Action="http://www.altinn.no/services/Archive/DownloadQueue/2012/08/IDownloadQueueExternalBasic/PurgeItemAltinnFaultFault" name="AltinnFaultFault" message="tns:IDownloadQueueExternalBasic_PurgeItem_AltinnFaultFault_FaultMessage"></wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="GetFormSetPdfBasic">
+            <wsdl:documentation>&lt;summary&gt;
+            This method provides a PDF version of a form set.
+            &lt;/summary&gt;
+            &lt;param name="systemName"&gt;
+            The user name for the agency system.
+            &lt;/param&gt;
+            &lt;param name="systemPassword"&gt;
+            The password for the agency system.
+            &lt;/param&gt;
+            &lt;param name="archiveReference"&gt;
+            The archive reference for the archived element to retrieve PDF for.
+            &lt;/param&gt;
+            &lt;param name="languageId"&gt;The language to use on translated text.&lt;/param&gt;
+            &lt;param name="dataFormatId"&gt;The Data Format ID to return PDFs for. This is an optional parameter, defaults to all IDs.&lt;/param&gt;
+            &lt;param name="dataFormatVersion"&gt;The Data Format Version to return PDFs for. This is an optional parameter, defaults to all Versions.&lt;/param&gt;
+            &lt;returns&gt;
+            Returns the PDF as binary.
+            &lt;/returns&gt;</wsdl:documentation>
+            <wsdl:input wsaw:Action="http://www.altinn.no/services/Archive/DownloadQueue/2012/08/IDownloadQueueExternalBasic/GetFormSetPdfBasic" message="tns:IDownloadQueueExternalBasic_GetFormSetPdfBasic_InputMessage"></wsdl:input>
+            <wsdl:output wsaw:Action="http://www.altinn.no/services/Archive/DownloadQueue/2012/08/IDownloadQueueExternalBasic/GetFormSetPdfBasicResponse" message="tns:IDownloadQueueExternalBasic_GetFormSetPdfBasic_OutputMessage"></wsdl:output>
+            <wsdl:fault wsaw:Action="http://www.altinn.no/services/Archive/DownloadQueue/2012/08/IDownloadQueueExternalBasic/GetFormSetPdfBasicAltinnFaultFault" name="AltinnFaultFault" message="tns:IDownloadQueueExternalBasic_GetFormSetPdfBasic_AltinnFaultFault_FaultMessage"></wsdl:fault>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="BasicHttpBinding_IDownloadQueueExternalBasic" type="tns:IDownloadQueueExternalBasic">
+        <wsp:PolicyReference URI="#BasicHttpBinding_IDownloadQueueExternalBasic_policy"></wsp:PolicyReference>
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http"></soap:binding>
+        <wsdl:operation name="Test">
+            <soap:operation soapAction="http://www.altinn.no/services/2009/10/IAltinnContractBase/Test" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+            <wsdl:fault name="AltinnFaultFault">
+                <soap:fault use="literal" name="AltinnFaultFault" namespace=""></soap:fault>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="GetArchivedFormTaskBasicDQ">
+            <soap:operation soapAction="http://www.altinn.no/services/Archive/DownloadQueue/2012/08/IDownloadQueueExternalBasic/GetArchivedFormTaskBasicDQ" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+            <wsdl:fault name="AltinnFaultFault">
+                <soap:fault use="literal" name="AltinnFaultFault" namespace=""></soap:fault>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="GetDownloadQueueItems">
+            <soap:operation soapAction="http://www.altinn.no/services/Archive/DownloadQueue/2012/08/IDownloadQueueExternalBasic/GetDownloadQueueItems" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+            <wsdl:fault name="AltinnFaultFault">
+                <soap:fault use="literal" name="AltinnFaultFault" namespace=""></soap:fault>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="PurgeItem">
+            <soap:operation soapAction="http://www.altinn.no/services/Archive/DownloadQueue/2012/08/IDownloadQueueExternalBasic/PurgeItem" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+            <wsdl:fault name="AltinnFaultFault">
+                <soap:fault use="literal" name="AltinnFaultFault" namespace=""></soap:fault>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="GetFormSetPdfBasic">
+            <soap:operation soapAction="http://www.altinn.no/services/Archive/DownloadQueue/2012/08/IDownloadQueueExternalBasic/GetFormSetPdfBasic" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+            <wsdl:fault name="AltinnFaultFault">
+                <soap:fault use="literal" name="AltinnFaultFault" namespace=""></soap:fault>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="DownloadQueueExternalBasic">
+        <wsdl:port name="BasicHttpBinding_IDownloadQueueExternalBasic" binding="tns:BasicHttpBinding_IDownloadQueueExternalBasic">
+            <soap:address location="https://www.altinn.no/ArchiveExternal/DownloadQueueExternalBasic.svc"></soap:address>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

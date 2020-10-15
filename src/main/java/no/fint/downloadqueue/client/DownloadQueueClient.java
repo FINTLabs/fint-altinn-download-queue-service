@@ -1,6 +1,6 @@
 package no.fint.downloadqueue.client;
 
-import no.fint.downloadqueue.configuration.AltinnConfiguration;
+import no.fint.downloadqueue.configuration.AltinnProperties;
 import no.altinn.downloadqueue.wsdl.*;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Component;
@@ -14,12 +14,12 @@ import java.util.Optional;
 @Component
 public class DownloadQueueClient extends WebServiceGatewaySupport {
     private final ObjectFactory objectFactory = new ObjectFactory();
-    private final AltinnConfiguration altinnConfiguration;
+    private final AltinnProperties altinnProperties;
 
-    public DownloadQueueClient(AltinnConfiguration altinnConfiguration) {
-        this.altinnConfiguration = altinnConfiguration;
+    public DownloadQueueClient(AltinnProperties altinnProperties) {
+        this.altinnProperties = altinnProperties;
 
-        setDefaultUri(altinnConfiguration.getDefaultUri());
+        setDefaultUri(altinnProperties.getDefaultUri());
         setMarshaller(marshaller());
         setUnmarshaller(marshaller());
 
@@ -30,9 +30,9 @@ public class DownloadQueueClient extends WebServiceGatewaySupport {
     public Optional<DownloadQueueItemBEList> getDownloadQueueItems() {
         GetDownloadQueueItems request = new GetDownloadQueueItems();
 
-        request.setServiceCode(objectFactory.createString(altinnConfiguration.getServiceCode()));
-        request.setSystemUserName(objectFactory.createString(altinnConfiguration.getSystemUsername()));
-        request.setSystemPassword(objectFactory.createString(altinnConfiguration.getSystemPassword()));
+        request.setServiceCode(objectFactory.createString(altinnProperties.getServiceCode()));
+        request.setSystemUserName(objectFactory.createString(altinnProperties.getSystemUsername()));
+        request.setSystemPassword(objectFactory.createString(altinnProperties.getSystemPassword()));
 
         GetDownloadQueueItemsResponse response = (GetDownloadQueueItemsResponse) getResponse(request, DownloadQueueSoapAction.GET_DOWNLOAD_QUEUE_ITEMS);
 
@@ -45,8 +45,8 @@ public class DownloadQueueClient extends WebServiceGatewaySupport {
         PurgeItem request = new PurgeItem();
 
         request.setArchiveReference(objectFactory.createString(archiveReference));
-        request.setSystemUserName(objectFactory.createString(altinnConfiguration.getSystemUsername()));
-        request.setSystemPassword(objectFactory.createString(altinnConfiguration.getSystemPassword()));
+        request.setSystemUserName(objectFactory.createString(altinnProperties.getSystemUsername()));
+        request.setSystemPassword(objectFactory.createString(altinnProperties.getSystemPassword()));
 
         PurgeItemResponse response = (PurgeItemResponse) getResponse(request, DownloadQueueSoapAction.PURGE_ITEM);
 
@@ -59,8 +59,8 @@ public class DownloadQueueClient extends WebServiceGatewaySupport {
         GetArchivedFormTaskBasicDQ request = new GetArchivedFormTaskBasicDQ();
 
         request.setArchiveReference(objectFactory.createString(archiveReference));
-        request.setSystemUserName(objectFactory.createString(altinnConfiguration.getSystemUsername()));
-        request.setSystemPassword(objectFactory.createString(altinnConfiguration.getSystemPassword()));
+        request.setSystemUserName(objectFactory.createString(altinnProperties.getSystemUsername()));
+        request.setSystemPassword(objectFactory.createString(altinnProperties.getSystemPassword()));
 
         GetArchivedFormTaskBasicDQResponse response = (GetArchivedFormTaskBasicDQResponse) getResponse(request, DownloadQueueSoapAction.GET_ARCHIVED_FORM_TASK);
 
@@ -73,8 +73,8 @@ public class DownloadQueueClient extends WebServiceGatewaySupport {
         GetFormSetPdfBasic request = new GetFormSetPdfBasic();
 
         request.setArchiveReference(archiveReference);
-        request.setSystemName(altinnConfiguration.getSystemUsername());
-        request.setSystemPassword(altinnConfiguration.getSystemPassword());
+        request.setSystemName(altinnProperties.getSystemUsername());
+        request.setSystemPassword(altinnProperties.getSystemPassword());
 
         /*
         request.setLanguageId();

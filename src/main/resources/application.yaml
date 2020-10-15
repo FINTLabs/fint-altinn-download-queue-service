@@ -2,4 +2,4 @@ altinn:
   service-code:
   system-username:
   system-password:
-  default-uri:
+  default-uri: https://www.altinn.no/ArchiveExternal/DownloadQueueExternalBasic.svc

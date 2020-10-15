@@ -1,6 +1,6 @@
 package no.fint.downloadqueue.client
 
-import no.fint.downloadqueue.configuration.AltinnConfiguration
+import no.fint.downloadqueue.configuration.AltinnProperties
 import no.fint.downloadqueue.exception.AltinnFaultException
 import org.springframework.xml.transform.StringSource
 import spock.lang.Specification
@@ -11,16 +11,16 @@ import static org.springframework.ws.test.client.RequestMatchers.*
 import static org.springframework.ws.test.client.ResponseCreators.*
 
 class DownloadQueueClientSpec extends Specification {
-    AltinnConfiguration altinnConfiguration = new AltinnConfiguration(
-            defaultUri: 'http://localhost',
-            systemUsername: 'username',
-            systemPassword: 'password',
-            serviceCode: 'code'
-    )
-
-    DownloadQueueClient client = new DownloadQueueClient(altinnConfiguration)
-
     MockWebServiceServer mockServer
+
+    AltinnProperties altinnProperties = Stub(AltinnProperties) {
+        getDefaultUri() >> 'http://localhost'
+        getSystemUsername() >> 'username'
+        getSystemPassword() >> 'password'
+        getServiceCode() >> 'service-code'
+    }
+
+    DownloadQueueClient client = new DownloadQueueClient(altinnProperties)
 
     void setup() {
         mockServer = MockWebServiceServer.createServer(client)
@@ -85,7 +85,7 @@ class DownloadQueueClientSpec extends Specification {
                         'xmlns="http://schemas.microsoft.com/2003/10/Serialization/">' +
                         '<string>username</string>' +
                         '<string>password</string>' +
-                        '<string>code</string>' +
+                        '<string>service-code</string>' +
                         '</x:GetDownloadQueueItems>'
         )
     }

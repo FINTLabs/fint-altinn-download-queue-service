@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Data
 @ConfigurationProperties("altinn")
-public class AltinnConfiguration {
+public class AltinnProperties {
     private String serviceCode;
     private String systemUsername;
     private String systemPassword;

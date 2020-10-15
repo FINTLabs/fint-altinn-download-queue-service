@@ -14,7 +14,7 @@ class DownloadQueueClientSpec extends Specification {
     MockWebServiceServer mockServer
 
     AltinnProperties altinnProperties = Stub(AltinnProperties) {
-        getDefaultUri() >> 'http://localhost'
+        getDownloadQueueUri() >> 'http://localhost'
         getSystemUsername() >> 'username'
         getSystemPassword() >> 'password'
         getServiceCode() >> 'service-code'
@@ -53,9 +53,9 @@ class DownloadQueueClientSpec extends Specification {
         response.get() == 'purged'
     }
 
-    def "getArchivedFormTaskDQ return expected result"() {
+    def "getArchivedFormTask return expected result"() {
         given:
-        mockServer.expect(payload(archivedFormTaskDQRequestPayload)).andRespond(withPayload(archivedFormTaskDQResponsePayload))
+        mockServer.expect(payload(archivedFormTaskRequestPayload())).andRespond(withPayload(archivedFormTaskResponsePayload()))
 
         when:
         def response = client.getArchivedFormTask('reference')
@@ -64,6 +64,18 @@ class DownloadQueueClientSpec extends Specification {
         mockServer.verify()
         response.isPresent()
         response.get().archiveReference.value == 'reference'
+    }
+
+    def "getFormSetPdf return expected result"() {
+        given:
+        mockServer.expect(payload(formSetPdfRequestPayload())).andRespond(withPayload(formSetPdfResponsePayload()))
+
+        when:
+        def response = client.getFormSetPdf('reference', 0)
+
+        then:
+        mockServer.verify()
+        response.isPresent()
     }
 
     def "AltinnFault throws exception"() {
@@ -122,7 +134,7 @@ class DownloadQueueClientSpec extends Specification {
         )
     }
 
-    Source getArchivedFormTaskDQRequestPayload() {
+    Source archivedFormTaskRequestPayload() {
         return new StringSource(
                 '<x:GetArchivedFormTaskBasicDQ xmlns:x="http://www.altinn.no/services/Archive/DownloadQueue/2012/08" ' +
                         'xmlns="http://schemas.microsoft.com/2003/10/Serialization/">' +
@@ -133,7 +145,7 @@ class DownloadQueueClientSpec extends Specification {
         )
     }
 
-    Source getArchivedFormTaskDQResponsePayload() {
+    Source archivedFormTaskResponsePayload() {
         return new StringSource(
                 '<x:GetArchivedFormTaskBasicDQResponse xmlns:x="http://www.altinn.no/services/Archive/DownloadQueue/2012/08" ' +
                         'xmlns="http://schemas.altinn.no/services/Archive/ReporteeArchive/2012/08">' +
@@ -141,6 +153,26 @@ class DownloadQueueClientSpec extends Specification {
                         '<ArchiveReference>reference</ArchiveReference>' +
                         '</x:GetArchivedFormTaskBasicDQResult>' +
                         '</x:GetArchivedFormTaskBasicDQResponse>'
+        )
+    }
+
+    Source formSetPdfRequestPayload() {
+        return new StringSource(
+                '<x:GetFormSetPdfBasic xmlns:x="http://www.altinn.no/services/Archive/DownloadQueue/2012/08">' +
+                        '<x:systemName>username</x:systemName>' +
+                        '<x:systemPassword>password</x:systemPassword>' +
+                        '<x:archiveReference>reference</x:archiveReference>' +
+                        '<x:languageId>0</x:languageId>' +
+                        '</x:GetFormSetPdfBasic>'
+        )
+    }
+
+    Source formSetPdfResponsePayload() {
+        return new StringSource(
+                '<x:GetFormSetPdfBasicResponse xmlns:x="http://www.altinn.no/services/Archive/DownloadQueue/2012/08"> ' +
+                        '<x:GetFormSetPdfBasicResult>' +
+                        '</x:GetFormSetPdfBasicResult>' +
+                        '</x:GetFormSetPdfBasicResponse>'
         )
     }
 

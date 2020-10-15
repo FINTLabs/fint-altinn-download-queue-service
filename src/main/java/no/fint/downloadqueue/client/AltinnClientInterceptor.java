@@ -3,7 +3,6 @@ package no.fint.downloadqueue.client;
 import no.fint.downloadqueue.exception.AltinnFaultException;
 import no.altinn.downloadqueue.wsdl.AltinnFault;
 import org.springframework.ws.client.WebServiceClientException;
-import org.springframework.ws.client.support.interceptor.ClientInterceptor;
 import org.springframework.ws.context.MessageContext;
 import org.springframework.ws.soap.*;
 
@@ -11,7 +10,7 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.transform.Source;
 import java.util.Optional;
 
-public class DownloadQueueClientInterceptor implements ClientInterceptor {
+public class AltinnClientInterceptor implements org.springframework.ws.client.support.interceptor.ClientInterceptor {
 
     @Override
     public boolean handleRequest(MessageContext messageContext) throws WebServiceClientException {

@@ -18,35 +18,61 @@ repositories {
 }
 
 task genJaxb {
-	ext.sourcesDir = "$buildDir/generated-sources/jaxb"
-	ext.classesDir = "$buildDir/classes/jaxb"
-	ext.schema = "$projectDir/src/main/resources/DownloadQueueExternalBasic.wsdl"
+	ext.downloadQueueSourcesDir = "$buildDir/generated-sources/downloadqueue"
+	ext.downloadQueueClassesDir = "$buildDir/classes/downloadqueue"
+	ext.downloadQueueSchema = "$projectDir/src/main/resources/DownloadQueueExternalBasic.wsdl"
 
-	outputs.dir classesDir
+	ext.attachmentDataStreamedSourcesDir = "$buildDir/generated-sources/attachmentdatastreamed"
+	ext.attachmentDataStreamedClassessDir = "$buildDir/classes/attachmentdatastreamed"
+	ext.attachmentDataStreamedSchema = "$projectDir/src/main/resources/ServiceOwnerArchiveExternalStreamedBasic.wsdl"
 
 	doLast() {
 		project.ant {
 			taskdef name: "xjc", classname: "com.sun.tools.xjc.XJCTask",
 					classpath: configurations.jaxb.asPath
-			mkdir(dir: sourcesDir)
-			mkdir(dir: classesDir)
 
-			xjc(destdir: sourcesDir, schema: schema,
+			mkdir(dir: downloadQueueSourcesDir)
+			mkdir(dir: downloadQueueClassesDir)
+
+			xjc(destdir: downloadQueueSourcesDir, schema: downloadQueueSchema,
 					package: "no.altinn.downloadqueue.wsdl") {
 				arg(value: "-wsdl")
-				produces(dir: sourcesDir, includes: "**/*.java")
+				produces(dir: downloadQueueSourcesDir, includes: "**/*.java")
 			}
 
-			javac(destdir: classesDir, source: 1.8, target: 1.8, debug: true,
+			javac(destdir: downloadQueueClassesDir, source: 1.8, target: 1.8, debug: true,
 					debugLevel: "lines,vars,source",
 					classpath: configurations.jaxb.asPath) {
-				src(path: sourcesDir)
+				src(path: downloadQueueSourcesDir)
 				include(name: "**/*.java")
 				include(name: "*.java")
 			}
 
-			copy(todir: classesDir) {
-				fileset(dir: sourcesDir, erroronmissingdir: false) {
+			copy(todir: downloadQueueClassesDir) {
+				fileset(dir: downloadQueueSourcesDir, erroronmissingdir: false) {
+					exclude(name: "**/*.java")
+				}
+			}
+
+			mkdir(dir: attachmentDataStreamedSourcesDir)
+			mkdir(dir: attachmentDataStreamedClassessDir)
+
+			xjc(destdir: attachmentDataStreamedSourcesDir, schema: attachmentDataStreamedSchema,
+					package: "no.altinn.attachmentdatastreamed.wsdl") {
+				arg(value: "-wsdl")
+				produces(dir: attachmentDataStreamedSourcesDir, includes: "**/*.java")
+			}
+
+			javac(destdir: attachmentDataStreamedClassessDir, source: 1.8, target: 1.8, debug: true,
+					debugLevel: "lines,vars,source",
+					classpath: configurations.jaxb.asPath) {
+				src(path: attachmentDataStreamedSourcesDir)
+				include(name: "**/*.java")
+				include(name: "*.java")
+			}
+
+			copy(todir: attachmentDataStreamedClassessDir) {
+				fileset(dir: attachmentDataStreamedSourcesDir, erroronmissingdir: false) {
 					exclude(name: "**/*.java")
 				}
 			}
@@ -62,7 +88,7 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
-	compile(files(genJaxb.classesDir).builtBy(genJaxb))
+	compile(files(genJaxb.downloadQueueClassesDir, genJaxb.attachmentDataStreamedClassessDir).builtBy(genJaxb))
 	jaxb 'com.sun.xml.bind:jaxb-xjc:2.1.7'
 
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {

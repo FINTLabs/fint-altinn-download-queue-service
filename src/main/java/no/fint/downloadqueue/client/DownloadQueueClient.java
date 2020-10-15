@@ -19,11 +19,11 @@ public class DownloadQueueClient extends WebServiceGatewaySupport {
     public DownloadQueueClient(AltinnProperties altinnProperties) {
         this.altinnProperties = altinnProperties;
 
-        setDefaultUri(altinnProperties.getDefaultUri());
+        setDefaultUri(altinnProperties.getDownloadQueueUri());
         setMarshaller(marshaller());
         setUnmarshaller(marshaller());
 
-        ClientInterceptor[] interceptors = {new DownloadQueueClientInterceptor()};
+        ClientInterceptor[] interceptors = {new AltinnClientInterceptor()};
         setInterceptors(interceptors);
     }
 
@@ -34,7 +34,7 @@ public class DownloadQueueClient extends WebServiceGatewaySupport {
         request.setSystemUserName(objectFactory.createString(altinnProperties.getSystemUsername()));
         request.setSystemPassword(objectFactory.createString(altinnProperties.getSystemPassword()));
 
-        GetDownloadQueueItemsResponse response = (GetDownloadQueueItemsResponse) getResponse(request, DownloadQueueSoapAction.GET_DOWNLOAD_QUEUE_ITEMS);
+        GetDownloadQueueItemsResponse response = (GetDownloadQueueItemsResponse) getResponse(request, AltinnSoapAction.GET_DOWNLOAD_QUEUE_ITEMS);
 
         return Optional.ofNullable(response)
                 .map(GetDownloadQueueItemsResponse::getGetDownloadQueueItemsResult)
@@ -48,7 +48,7 @@ public class DownloadQueueClient extends WebServiceGatewaySupport {
         request.setSystemUserName(objectFactory.createString(altinnProperties.getSystemUsername()));
         request.setSystemPassword(objectFactory.createString(altinnProperties.getSystemPassword()));
 
-        PurgeItemResponse response = (PurgeItemResponse) getResponse(request, DownloadQueueSoapAction.PURGE_ITEM);
+        PurgeItemResponse response = (PurgeItemResponse) getResponse(request, AltinnSoapAction.PURGE_ITEM);
 
         return Optional.ofNullable(response)
                 .map(PurgeItemResponse::getPurgeItemResult)
@@ -62,27 +62,27 @@ public class DownloadQueueClient extends WebServiceGatewaySupport {
         request.setSystemUserName(objectFactory.createString(altinnProperties.getSystemUsername()));
         request.setSystemPassword(objectFactory.createString(altinnProperties.getSystemPassword()));
 
-        GetArchivedFormTaskBasicDQResponse response = (GetArchivedFormTaskBasicDQResponse) getResponse(request, DownloadQueueSoapAction.GET_ARCHIVED_FORM_TASK);
+        GetArchivedFormTaskBasicDQResponse response = (GetArchivedFormTaskBasicDQResponse) getResponse(request, AltinnSoapAction.GET_ARCHIVED_FORM_TASK);
 
         return Optional.ofNullable(response)
                 .map(GetArchivedFormTaskBasicDQResponse::getGetArchivedFormTaskBasicDQResult)
                 .map(JAXBElement::getValue);
     }
 
-    public Optional<byte[]> getFormSetPdf(String archiveReference) {
+    public Optional<byte[]> getFormSetPdf(String archiveReference, int languageId) {
         GetFormSetPdfBasic request = new GetFormSetPdfBasic();
 
         request.setArchiveReference(archiveReference);
         request.setSystemName(altinnProperties.getSystemUsername());
         request.setSystemPassword(altinnProperties.getSystemPassword());
+        request.setLanguageId(languageId);
 
         /*
-        request.setLanguageId();
         request.setDataFormatId();
         request.setDataFormatVersion();
          */
 
-        GetFormSetPdfBasicResponse response = (GetFormSetPdfBasicResponse) getResponse(request, DownloadQueueSoapAction.GET_FORM_SET_PDF);
+        GetFormSetPdfBasicResponse response = (GetFormSetPdfBasicResponse) getResponse(request, AltinnSoapAction.GET_FORM_SET_PDF);
 
         return Optional.ofNullable(response)
                 .map(GetFormSetPdfBasicResponse::getGetFormSetPdfBasicResult)

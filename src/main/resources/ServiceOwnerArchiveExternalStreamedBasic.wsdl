@@ -1,0 +1,149 @@
+<wsdl:definitions name="ServiceOwnerArchiveExternalStreamedBasicSF"
+                  targetNamespace="http://www.altinn.no/services/Archive/ServiceOwnerArchive/2013/06"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex"
+                  xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+                  xmlns:wsa10="http://www.w3.org/2005/08/addressing"
+                  xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                  xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy"
+                  xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract"
+                  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                  xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing"
+                  xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  xmlns:tns="http://www.altinn.no/services/Archive/ServiceOwnerArchive/2013/06"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+                  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">
+    <wsp:Policy wsu:Id="BasicHttpBinding_IServiceOwnerArchiveExternalStreamedBasic_policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <wsoma:OptimizedMimeSerialization
+                        xmlns:wsoma="http://schemas.xmlsoap.org/ws/2004/09/policy/optimizedmimeserialization"></wsoma:OptimizedMimeSerialization>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsdl:types>
+        <xsd:schema targetNamespace="http://www.altinn.no/services/Archive/ServiceOwnerArchive/2013/06/Imports">
+            <xsd:import
+                    schemaLocation="https://www.altinn.no/ArchiveExternal/ServiceOwnerArchiveExternalStreamedBasic.svc?xsd=xsd0"
+                    namespace="http://www.altinn.no/services/2009/10"></xsd:import>
+            <xsd:import
+                    schemaLocation="https://www.altinn.no/ArchiveExternal/ServiceOwnerArchiveExternalStreamedBasic.svc?xsd=xsd2"
+                    namespace="http://www.altinn.no/services/common/fault/2009/10"></xsd:import>
+            <xsd:import
+                    schemaLocation="https://www.altinn.no/ArchiveExternal/ServiceOwnerArchiveExternalStreamedBasic.svc?xsd=xsd1"
+                    namespace="http://schemas.microsoft.com/2003/10/Serialization/"></xsd:import>
+            <xsd:import
+                    schemaLocation="https://www.altinn.no/ArchiveExternal/ServiceOwnerArchiveExternalStreamedBasic.svc?xsd=xsd3"
+                    namespace="http://www.altinn.no/services/Archive/ServiceOwnerArchive/2013/06"></xsd:import>
+            <xsd:import
+                    schemaLocation="https://www.altinn.no/ArchiveExternal/ServiceOwnerArchiveExternalStreamedBasic.svc?xsd=xsd4"
+                    namespace="http://schemas.microsoft.com/Message"></xsd:import>
+        </xsd:schema>
+    </wsdl:types>
+    <wsdl:message name="IServiceOwnerArchiveExternalStreamedBasic_Test_InputMessage">
+        <wsdl:part name="parameters" element="q1:Test" xmlns:q1="http://www.altinn.no/services/2009/10"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="IServiceOwnerArchiveExternalStreamedBasic_Test_OutputMessage">
+        <wsdl:part name="parameters" element="q2:TestResponse"
+                   xmlns:q2="http://www.altinn.no/services/2009/10"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="IServiceOwnerArchiveExternalStreamedBasic_Test_AltinnFaultFault_FaultMessage">
+        <wsdl:part name="detail" element="q3:AltinnFault"
+                   xmlns:q3="http://www.altinn.no/services/common/fault/2009/10"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="IServiceOwnerArchiveExternalStreamedBasic_GetAttachmentDataStreamedBasic_InputMessage">
+        <wsdl:part name="parameters" element="tns:GetAttachmentDataStreamedBasic"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="IServiceOwnerArchiveExternalStreamedBasic_GetAttachmentDataStreamedBasic_OutputMessage">
+        <wsdl:part name="parameters" element="tns:GetAttachmentDataStreamedBasicResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message
+            name="IServiceOwnerArchiveExternalStreamedBasic_GetAttachmentDataStreamedBasic_AltinnFaultFault_FaultMessage">
+        <wsdl:part name="detail" element="q4:AltinnFault"
+                   xmlns:q4="http://www.altinn.no/services/common/fault/2009/10"></wsdl:part>
+    </wsdl:message>
+    <wsdl:portType name="IServiceOwnerArchiveExternalStreamedBasic">
+        <wsdl:documentation>&lt;summary&gt;
+            External service contract on basic binding for the Service Owner Archive service
+            &lt;/summary&gt;
+        </wsdl:documentation>
+        <wsdl:operation name="Test">
+            <wsdl:input wsaw:Action="http://www.altinn.no/services/2009/10/IAltinnContractBase/Test"
+                        message="tns:IServiceOwnerArchiveExternalStreamedBasic_Test_InputMessage"></wsdl:input>
+            <wsdl:output wsaw:Action="http://www.altinn.no/services/2009/10/IAltinnContractBase/TestResponse"
+                         message="tns:IServiceOwnerArchiveExternalStreamedBasic_Test_OutputMessage"></wsdl:output>
+            <wsdl:fault wsaw:Action="http://www.altinn.no/services/2009/10/IAltinnContractBase/TestAltinnFaultFault"
+                        name="AltinnFaultFault"
+                        message="tns:IServiceOwnerArchiveExternalStreamedBasic_Test_AltinnFaultFault_FaultMessage"></wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="GetAttachmentDataStreamedBasic">
+            <wsdl:documentation>&lt;summary&gt;
+                Returns a binary stream of a file attachment specified by the attachmentId provided.
+                &lt;/summary&gt;
+                &lt;param name="systemUserName"&gt;
+                System user name is the relevant agency system name that is registered in Altinn - mandatory parameter
+                &lt;/param&gt;
+                &lt;param name="systemPassword"&gt;
+                System password is the password for the corresponding registered agency system - mandatory parameter
+                &lt;/param&gt;
+                &lt;param name="attachmentId"&gt;
+                Identifier for an attachment to get - mandatory parameter
+                &lt;/param&gt;
+                &lt;returns&gt;
+                a binary stream
+                &lt;/returns&gt;
+            </wsdl:documentation>
+            <wsdl:input
+                    wsaw:Action="http://www.altinn.no/services/Archive/ServiceOwnerArchive/2013/06/IServiceOwnerArchiveExternalStreamedBasic/GetAttachmentDataStreamedBasic"
+                    message="tns:IServiceOwnerArchiveExternalStreamedBasic_GetAttachmentDataStreamedBasic_InputMessage"></wsdl:input>
+            <wsdl:output
+                    wsaw:Action="http://www.altinn.no/services/Archive/ServiceOwnerArchive/2013/06/IServiceOwnerArchiveExternalStreamedBasic/GetAttachmentDataStreamedBasicResponse"
+                    message="tns:IServiceOwnerArchiveExternalStreamedBasic_GetAttachmentDataStreamedBasic_OutputMessage"></wsdl:output>
+            <wsdl:fault
+                    wsaw:Action="http://www.altinn.no/services/Archive/ServiceOwnerArchive/2013/06/IServiceOwnerArchiveExternalStreamedBasic/GetAttachmentDataStreamedBasicAltinnFaultFault"
+                    name="AltinnFaultFault"
+                    message="tns:IServiceOwnerArchiveExternalStreamedBasic_GetAttachmentDataStreamedBasic_AltinnFaultFault_FaultMessage"></wsdl:fault>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="BasicHttpBinding_IServiceOwnerArchiveExternalStreamedBasic"
+                  type="tns:IServiceOwnerArchiveExternalStreamedBasic">
+        <wsp:PolicyReference
+                URI="#BasicHttpBinding_IServiceOwnerArchiveExternalStreamedBasic_policy"></wsp:PolicyReference>
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http"></soap:binding>
+        <wsdl:operation name="Test">
+            <soap:operation soapAction="http://www.altinn.no/services/2009/10/IAltinnContractBase/Test"
+                            style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+            <wsdl:fault name="AltinnFaultFault">
+                <soap:fault name="AltinnFaultFault" use="literal"></soap:fault>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="GetAttachmentDataStreamedBasic">
+            <soap:operation
+                    soapAction="http://www.altinn.no/services/Archive/ServiceOwnerArchive/2013/06/IServiceOwnerArchiveExternalStreamedBasic/GetAttachmentDataStreamedBasic"
+                    style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+            <wsdl:fault name="AltinnFaultFault">
+                <soap:fault name="AltinnFaultFault" use="literal"></soap:fault>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="ServiceOwnerArchiveExternalStreamedBasicSF">
+        <wsdl:port name="BasicHttpBinding_IServiceOwnerArchiveExternalStreamedBasic"
+                   binding="tns:BasicHttpBinding_IServiceOwnerArchiveExternalStreamedBasic">
+            <soap:address
+                    location="https://www.altinn.no/ArchiveExternal/ServiceOwnerArchiveExternalStreamedBasic.svc"></soap:address>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

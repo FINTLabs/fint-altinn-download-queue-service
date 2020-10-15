@@ -1,5 +1,6 @@
 altinn:
-  service-code:
+  service-code: 5583
   system-username:
   system-password:
-  default-uri: https://www.altinn.no/ArchiveExternal/DownloadQueueExternalBasic.svc
+  download-queue-uri: https://www.altinn.no/ArchiveExternal/DownloadQueueExternalBasic.svc
+  attachment-data-streamed-uri: https://www.altinn.no/ArchiveExternal/ServiceOwnerArchiveExternalStreamedBasic.svc

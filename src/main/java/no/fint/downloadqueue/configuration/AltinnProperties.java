@@ -9,5 +9,6 @@ public class AltinnProperties {
     private String serviceCode;
     private String systemUsername;
     private String systemPassword;
-    private String defaultUri;
+    private String downloadQueueUri;
+    private String attachmentDataStreamedUri;
 }

@@ -3,16 +3,14 @@ scheduling:
   fixed-delay: 7200000
 
 altinn:
-  service-code: 5583
+  service-code: service-code
   system-username: username
   system-password: password
   download-queue-uri: https://tt02.altinn.no/ArchiveExternal/DownloadQueueExternalBasic.svc
   attachment-data-streamed-uri: https://tt02.altinn.no/ArchiveExternal/ServiceOwnerArchiveExternalStreamedBasic.svc
 
-logging:
-  level:
-    org.springframework.web: DEBUG
-    org.springframework.ws.client.MessageTracing.sent: DEBUG
-    org.springframework.ws.server.MessageTracing.sent: DEBUG
-    org.springframework.ws.client.MessageTracing.received: TRACE
-    org.springframework.ws.server.MessageTracing.received: TRACE
+spring:
+  data:
+    mongodb:
+      database: altinn
+      port: 27017

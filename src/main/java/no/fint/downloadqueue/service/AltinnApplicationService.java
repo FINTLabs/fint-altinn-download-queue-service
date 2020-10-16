@@ -6,9 +6,9 @@ import no.altinn.downloadqueue.wsdl.ArchivedFormTaskDQBE;
 import no.altinn.downloadqueue.wsdl.DownloadQueueItemBE;
 import no.fint.downloadqueue.client.DownloadQueueClient;
 import no.fint.downloadqueue.exception.AltinnFaultException;
-import no.fint.downloadqueue.model.TaxiLicenseApplicationFactory;
-import no.fint.downloadqueue.model.TaxiLicenseApplication;
-import no.fint.downloadqueue.repository.TaxiLicenseApplicationRepository;
+import no.fint.downloadqueue.model.AltinnApplicationFactory;
+import no.fint.downloadqueue.model.AltinnApplication;
+import no.fint.downloadqueue.repository.AltinnApplicationRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.ws.client.WebServiceClientException;
@@ -18,13 +18,13 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class TaxiLicenseApplicationService {
+public class AltinnApplicationService {
     private final DownloadQueueClient downloadQueueClient;
-    private final TaxiLicenseApplicationRepository taxiLicenseApplicationRepository;
+    private final AltinnApplicationRepository altinnApplicationRepository;
 
-    public TaxiLicenseApplicationService(DownloadQueueClient downloadQueueClient, TaxiLicenseApplicationRepository taxiLicenseApplicationRepository) {
+    public AltinnApplicationService(DownloadQueueClient downloadQueueClient, AltinnApplicationRepository altinnApplicationRepository) {
         this.downloadQueueClient = downloadQueueClient;
-        this.taxiLicenseApplicationRepository = taxiLicenseApplicationRepository;
+        this.altinnApplicationRepository = altinnApplicationRepository;
     }
 
     @Scheduled(initialDelayString = "${scheduling.initial-delay}", fixedDelayString = "${scheduling.fixed-delay}")
@@ -41,10 +41,12 @@ public class TaxiLicenseApplicationService {
             return;
         }
 
+        log.info("{} items in DownloadQueue", downloadQueueItems.size());
+
         downloadQueueItems.forEach(item -> {
             String archiveReference = item.getArchiveReference().getValue();
 
-            if (taxiLicenseApplicationRepository.existsById(archiveReference)) {
+            if (altinnApplicationRepository.existsById(archiveReference)) {
                 return;
             }
 
@@ -53,7 +55,7 @@ public class TaxiLicenseApplicationService {
             try {
                 archivedFormTask = downloadQueueClient.getArchivedFormTask(archiveReference);
             } catch (AltinnFaultException ex) {
-                log.error(archiveReference + " - " + altinnFaultToString(ex.getAltinnFault()));
+                log.error(archiveReference +  altinnFaultToString(ex.getAltinnFault()));
                 return;
             }  catch (WebServiceClientException ex) {
                 log.error(archiveReference + " - " + ex.getMessage(), ex);
@@ -61,9 +63,9 @@ public class TaxiLicenseApplicationService {
             }
 
             archivedFormTask.ifPresent(task -> {
-                Optional<TaxiLicenseApplication> taxiLicenseApplication = TaxiLicenseApplicationFactory.of(item, task);
+                Optional<AltinnApplication> taxiLicenseApplication = AltinnApplicationFactory.of(item, task);
 
-                taxiLicenseApplication.ifPresent(taxiLicenseApplicationRepository::save);
+                taxiLicenseApplication.ifPresent(altinnApplicationRepository::save);
             });
         });
     }
@@ -78,6 +80,6 @@ public class TaxiLicenseApplicationService {
                         "ErrorID: " + fault.getErrorID() + '\n' +
                         "UserGuid: " + fault.getUserGuid().getValue() + '\n' +
                         "UserId: " + fault.getUserId().getValue())
-                .orElse("AltinnFault not present in response");
+                .orElse("An errror occurred");
     }
 }

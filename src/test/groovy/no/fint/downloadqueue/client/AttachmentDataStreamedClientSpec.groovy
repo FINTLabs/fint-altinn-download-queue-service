@@ -35,7 +35,7 @@ class AttachmentDataStreamedClientSpec extends Specification {
 
         then:
         mockServer.verify()
-        response.isPresent()
+        response.length == 0
     }
 
     def "AltinnFault throws exception"() {
@@ -53,11 +53,11 @@ class AttachmentDataStreamedClientSpec extends Specification {
 
     Source attachmentDataStreamedRequestPayload() {
         return new StringSource(
-                '<x:GetAttachmentDataStreamedBasic xmlns:x="http://www.altinn.no/services/Archive/ServiceOwnerArchive/2013/06">' +
-                        '<x:systemUserName>username</x:systemUserName>' +
-                        '<x:systemPassword>password</x:systemPassword>' +
-                        '<x:attachmentId>0</x:attachmentId>' +
-                        '</x:GetAttachmentDataStreamedBasic>'
+                '<GetAttachmentDataStreamedBasic xmlns="http://www.altinn.no/services/Archive/ServiceOwnerArchive/2013/06">' +
+                        '<systemUserName>username</systemUserName>' +
+                        '<systemPassword>password</systemPassword>' +
+                        '<attachmentId>0</attachmentId>' +
+                        '</GetAttachmentDataStreamedBasic>'
         )
     }
 

@@ -9,6 +9,8 @@ import org.springframework.ws.client.support.interceptor.ClientInterceptor;
 import org.springframework.ws.soap.client.core.SoapActionCallback;
 
 import javax.xml.bind.JAXBElement;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -27,26 +29,28 @@ public class DownloadQueueClient extends WebServiceGatewaySupport {
         setInterceptors(interceptors);
     }
 
-    public Optional<DownloadQueueItemBEList> getDownloadQueueItems() {
+    public List<DownloadQueueItemBE> getDownloadQueueItems() {
         GetDownloadQueueItems request = new GetDownloadQueueItems();
 
-        request.setServiceCode(objectFactory.createString(altinnProperties.getServiceCode()));
-        request.setSystemUserName(objectFactory.createString(altinnProperties.getSystemUsername()));
-        request.setSystemPassword(objectFactory.createString(altinnProperties.getSystemPassword()));
+        request.setServiceCode(objectFactory.createGetDownloadQueueItemsServiceCode(altinnProperties.getServiceCode()));
+        request.setSystemUserName(objectFactory.createGetDownloadQueueItemsSystemUserName(altinnProperties.getSystemUsername()));
+        request.setSystemPassword(objectFactory.createGetDownloadQueueItemsSystemPassword(altinnProperties.getSystemPassword()));
 
         GetDownloadQueueItemsResponse response = (GetDownloadQueueItemsResponse) getResponse(request, AltinnSoapAction.GET_DOWNLOAD_QUEUE_ITEMS);
 
         return Optional.ofNullable(response)
                 .map(GetDownloadQueueItemsResponse::getGetDownloadQueueItemsResult)
-                .map(JAXBElement::getValue);
+                .map(JAXBElement::getValue)
+                .map(DownloadQueueItemBEList::getDownloadQueueItemBE)
+                .orElseGet(Collections::emptyList);
     }
 
     public Optional<String> purgeItem(String archiveReference) {
         PurgeItem request = new PurgeItem();
 
-        request.setArchiveReference(objectFactory.createString(archiveReference));
-        request.setSystemUserName(objectFactory.createString(altinnProperties.getSystemUsername()));
-        request.setSystemPassword(objectFactory.createString(altinnProperties.getSystemPassword()));
+        request.setArchiveReference(objectFactory.createPurgeItemArchiveReference(archiveReference));
+        request.setSystemUserName(objectFactory.createGetDownloadQueueItemsSystemUserName(altinnProperties.getSystemUsername()));
+        request.setSystemPassword(objectFactory.createGetDownloadQueueItemsSystemPassword(altinnProperties.getSystemPassword()));
 
         PurgeItemResponse response = (PurgeItemResponse) getResponse(request, AltinnSoapAction.PURGE_ITEM);
 
@@ -58,9 +62,9 @@ public class DownloadQueueClient extends WebServiceGatewaySupport {
     public Optional<ArchivedFormTaskDQBE> getArchivedFormTask(String archiveReference) {
         GetArchivedFormTaskBasicDQ request = new GetArchivedFormTaskBasicDQ();
 
-        request.setArchiveReference(objectFactory.createString(archiveReference));
-        request.setSystemUserName(objectFactory.createString(altinnProperties.getSystemUsername()));
-        request.setSystemPassword(objectFactory.createString(altinnProperties.getSystemPassword()));
+        request.setArchiveReference(objectFactory.createPurgeItemArchiveReference(archiveReference));
+        request.setSystemUserName(objectFactory.createGetDownloadQueueItemsSystemUserName(altinnProperties.getSystemUsername()));
+        request.setSystemPassword(objectFactory.createGetDownloadQueueItemsSystemPassword(altinnProperties.getSystemPassword()));
 
         GetArchivedFormTaskBasicDQResponse response = (GetArchivedFormTaskBasicDQResponse) getResponse(request, AltinnSoapAction.GET_ARCHIVED_FORM_TASK);
 
@@ -69,7 +73,7 @@ public class DownloadQueueClient extends WebServiceGatewaySupport {
                 .map(JAXBElement::getValue);
     }
 
-    public Optional<byte[]> getFormSetPdf(String archiveReference, int languageId) {
+    public byte[] getFormSetPdf(String archiveReference, int languageId) {
         GetFormSetPdfBasic request = new GetFormSetPdfBasic();
 
         request.setArchiveReference(archiveReference);
@@ -86,7 +90,8 @@ public class DownloadQueueClient extends WebServiceGatewaySupport {
 
         return Optional.ofNullable(response)
                 .map(GetFormSetPdfBasicResponse::getGetFormSetPdfBasicResult)
-                .map(JAXBElement::getValue);
+                .map(JAXBElement::getValue)
+                .orElse(new byte[0]);
     }
 
     private Object getResponse(Object request, String soapAction) {
@@ -96,6 +101,7 @@ public class DownloadQueueClient extends WebServiceGatewaySupport {
     public static Jaxb2Marshaller marshaller() {
         Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
         marshaller.setContextPath("no.altinn.downloadqueue.wsdl");
+        marshaller.setMtomEnabled(true);
         return marshaller;
     }
 }

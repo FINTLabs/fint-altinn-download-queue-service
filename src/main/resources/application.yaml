@@ -1,6 +1,10 @@
+scheduling:
+  initial-delay: 5000
+  fixed-delay: 7200000
+
 altinn:
   service-code: 5583
-  system-username:
-  system-password:
+  system-username: username
+  system-password: password
   download-queue-uri: https://www.altinn.no/ArchiveExternal/DownloadQueueExternalBasic.svc
   attachment-data-streamed-uri: https://www.altinn.no/ArchiveExternal/ServiceOwnerArchiveExternalStreamedBasic.svc

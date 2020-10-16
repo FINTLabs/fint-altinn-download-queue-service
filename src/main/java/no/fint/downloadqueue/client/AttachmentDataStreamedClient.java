@@ -26,7 +26,7 @@ public class AttachmentDataStreamedClient extends WebServiceGatewaySupport {
         setInterceptors(interceptors);
     }
 
-    public Optional<byte[]> getAttachmentDataStreamed(int attachmentId) {
+    public byte[] getAttachmentDataStreamed(int attachmentId) {
         GetAttachmentDataStreamedBasic request = new GetAttachmentDataStreamedBasic();
 
         request.setSystemUserName(altinnProperties.getSystemUsername());
@@ -37,12 +37,14 @@ public class AttachmentDataStreamedClient extends WebServiceGatewaySupport {
                 getWebServiceTemplate().marshalSendAndReceive(request, new SoapActionCallback(AltinnSoapAction.GET_ATTACHMENT_DATA_STREAMED));
 
         return Optional.ofNullable(response)
-                .map(GetAttachmentDataStreamedBasicResponse::getGetAttachmentDataStreamedBasicResult);
+                .map(GetAttachmentDataStreamedBasicResponse::getGetAttachmentDataStreamedBasicResult)
+                .orElse(new byte[0]);
     }
 
     public static Jaxb2Marshaller marshaller() {
         Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
         marshaller.setContextPath("no.altinn.attachmentdatastreamed.wsdl");
+        marshaller.setMtomEnabled(true);
         return marshaller;
     }
 }

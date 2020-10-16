@@ -27,8 +27,8 @@ public class AltinnApplicationService {
         this.altinnApplicationRepository = altinnApplicationRepository;
     }
 
-    @Scheduled(initialDelayString = "${scheduling.initial-delay}", fixedDelayString = "${scheduling.fixed-delay}")
-    public void updateTaxiLicenseApplications() {
+    @Scheduled(initialDelayString = "${scheduling.initial-delay-get}", fixedDelayString = "${scheduling.fixed-delay-get}")
+    public void updateAltinnApplications() {
         List<DownloadQueueItemBE> downloadQueueItems;
 
         try {
@@ -68,6 +68,10 @@ public class AltinnApplicationService {
                 taxiLicenseApplication.ifPresent(altinnApplicationRepository::save);
             });
         });
+    }
+
+    @Scheduled(initialDelayString = "${scheduling.initial-delay-purge}", fixedDelayString = "${scheduling.fixed-delay-purge}")
+    public void purgeAltinnApplications() {
     }
 
     private String altinnFaultToString(AltinnFault altinnFault) {

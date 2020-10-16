@@ -21,7 +21,7 @@ class AltinnApplicationServiceSpec extends Specification {
                 archiveReference: objectFactory.createDownloadQueueItemBEArchiveReference('archive-reference'))
 
         when:
-        service.updateTaxiLicenseApplications()
+        service.updateAltinnApplications()
 
         then:
         1 * client.getDownloadQueueItems() >> [item]
@@ -36,7 +36,7 @@ class AltinnApplicationServiceSpec extends Specification {
                 archiveReference: objectFactory.createDownloadQueueItemBEArchiveReference('archive-reference'))
 
         when:
-        service.updateTaxiLicenseApplications()
+        service.updateAltinnApplications()
 
         then:
         1 * client.getDownloadQueueItems() >> [item]

@@ -11,7 +11,6 @@ import no.fint.downloadqueue.model.AltinnApplication;
 import no.fint.downloadqueue.repository.AltinnApplicationRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.ws.client.WebServiceClientException;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,10 +20,12 @@ import java.util.Optional;
 public class AltinnApplicationService {
     private final DownloadQueueClient downloadQueueClient;
     private final AltinnApplicationRepository altinnApplicationRepository;
+    private final AltinnApplicationFactory altinnApplicationFactory;
 
-    public AltinnApplicationService(DownloadQueueClient downloadQueueClient, AltinnApplicationRepository altinnApplicationRepository) {
+    public AltinnApplicationService(DownloadQueueClient downloadQueueClient, AltinnApplicationRepository altinnApplicationRepository, AltinnApplicationFactory altinnApplicationFactory) {
         this.downloadQueueClient = downloadQueueClient;
         this.altinnApplicationRepository = altinnApplicationRepository;
+        this.altinnApplicationFactory = altinnApplicationFactory;
     }
 
     @Scheduled(initialDelayString = "${scheduling.initial-delay-get}", fixedDelayString = "${scheduling.fixed-delay-get}")
@@ -36,15 +37,15 @@ public class AltinnApplicationService {
         } catch (AltinnFaultException ex) {
             log.error(altinnFaultToString(ex.getAltinnFault()));
             return;
-        }  catch (WebServiceClientException ex) {
+        } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
             return;
         }
 
         log.info("{} items in DownloadQueue", downloadQueueItems.size());
 
-        downloadQueueItems.forEach(item -> {
-            String archiveReference = item.getArchiveReference().getValue();
+        downloadQueueItems.forEach(downloadQueuItem -> {
+            String archiveReference = downloadQueuItem.getArchiveReference().getValue();
 
             if (altinnApplicationRepository.existsById(archiveReference)) {
                 return;
@@ -54,24 +55,20 @@ public class AltinnApplicationService {
 
             try {
                 archivedFormTask = downloadQueueClient.getArchivedFormTask(archiveReference);
+
+                archivedFormTask.ifPresent(formTask -> {
+                    AltinnApplication altinnApplication = altinnApplicationFactory.of(downloadQueuItem, formTask);
+
+                    altinnApplicationRepository.save(altinnApplication);
+
+                    log.info("New document created from archive reference: {}", archiveReference);
+                });
             } catch (AltinnFaultException ex) {
-                log.error(archiveReference +  altinnFaultToString(ex.getAltinnFault()));
-                return;
-            }  catch (WebServiceClientException ex) {
-                log.error(archiveReference + " - " + ex.getMessage(), ex);
-                return;
+                log.error(altinnFaultToString(ex.getAltinnFault()));
+            } catch (Exception ex) {
+                log.error(ex.getMessage(), ex);
             }
-
-            archivedFormTask.ifPresent(task -> {
-                Optional<AltinnApplication> taxiLicenseApplication = AltinnApplicationFactory.of(item, task);
-
-                taxiLicenseApplication.ifPresent(altinnApplicationRepository::save);
-            });
         });
-    }
-
-    @Scheduled(initialDelayString = "${scheduling.initial-delay-purge}", fixedDelayString = "${scheduling.fixed-delay-purge}")
-    public void purgeAltinnApplications() {
     }
 
     private String altinnFaultToString(AltinnFault altinnFault) {
@@ -84,6 +81,6 @@ public class AltinnApplicationService {
                         "ErrorID: " + fault.getErrorID() + '\n' +
                         "UserGuid: " + fault.getUserGuid().getValue() + '\n' +
                         "UserId: " + fault.getUserId().getValue())
-                .orElse("An errror occurred");
+                .orElse("An error occurred");
     }
 }

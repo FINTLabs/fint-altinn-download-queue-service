@@ -1,8 +1,6 @@
 scheduling:
-  initial-delay-get: 10000
-  fixed-delay-get: 7200000
-  initial-delay-purge: 3600000
-  fixed-delay-purge: 7200000
+  initial-delay: 10000
+  fixed-delay: 7200000
 
 altinn:
   service-code: service-code

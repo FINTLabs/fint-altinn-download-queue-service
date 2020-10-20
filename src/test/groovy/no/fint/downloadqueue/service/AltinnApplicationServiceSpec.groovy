@@ -17,14 +17,14 @@ class AltinnApplicationServiceSpec extends Specification {
 
     AltinnApplicationService service = new AltinnApplicationService(client, repository, factory)
 
-    def "update taxi license applications saves if application does not exist"() {
+    def "create altinn application if application does not exist"() {
         given:
         def item = new DownloadQueueItemBE(
                 archiveReference: objectFactory.createDownloadQueueItemBEArchiveReference('archive-reference'))
         def task = objectFactory.createArchivedFormTaskDQBE()
 
         when:
-        service.updateAltinnApplications()
+        service.create()
 
         then:
         1 * client.getDownloadQueueItems() >> [item]
@@ -34,16 +34,35 @@ class AltinnApplicationServiceSpec extends Specification {
         1 * repository.save(_)
     }
 
-    def "update taxi license applications returns if application exists"() {
+    def "create altinn application returns if application exists"() {
         given:
         def item = new DownloadQueueItemBE(
                 archiveReference: objectFactory.createDownloadQueueItemBEArchiveReference('archive-reference'))
 
         when:
-        service.updateAltinnApplications()
+        service.create()
 
         then:
         1 * client.getDownloadQueueItems() >> [item]
         1 * repository.existsById(_ as String) >> true
+    }
+
+    def "purge altinn application if application has status archived"() {
+        when:
+        service.purge()
+
+        then:
+        1 * repository.findByStatus(_) >> [new AltinnApplication()]
+        1 * repository.findById(_) >> Optional.of(new AltinnApplication())
+        1 * client.purgeItem(_) >> Optional.of('purged')
+        1 * repository.save(_)
+    }
+
+    def "purge altinn application returns if no documents with application has status archived"() {
+        when:
+        service.purge()
+
+        then:
+        1 * repository.findByStatus(_) >> []
     }
 }

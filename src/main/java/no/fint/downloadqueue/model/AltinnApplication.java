@@ -35,7 +35,6 @@ public class AltinnApplication {
 
     @Data
     public static class Form {
-        private String reference;
         private String formData;
         private byte[] formDataPdf;
     }

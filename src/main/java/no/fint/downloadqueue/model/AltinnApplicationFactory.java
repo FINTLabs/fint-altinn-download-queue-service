@@ -60,7 +60,6 @@ public class AltinnApplicationFactory {
                 .ifPresent(archivedForm -> {
                     AltinnApplication.Form form = new AltinnApplication.Form();
 
-                    form.setReference(archivedForm.getReference().getValue());
                     form.setFormData(archivedForm.getFormData().getValue());
 
                     byte[] formDataPdf;

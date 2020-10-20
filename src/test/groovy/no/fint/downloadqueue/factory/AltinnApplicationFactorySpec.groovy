@@ -46,7 +46,6 @@ class AltinnApplicationFactorySpec extends Specification {
         application.serviceCode == 'service-code'
         application.languageCode == 1044
         application.status == AltinnApplicationStatus.NEW
-        application.form.reference == 'reference'
         application.form.formData == '<xml>'
         application.form.formDataPdf == [0, 1, 2] as byte[]
         application.attachments.first().attachmentId == 0

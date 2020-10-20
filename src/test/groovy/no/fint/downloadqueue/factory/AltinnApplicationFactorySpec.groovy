@@ -41,8 +41,8 @@ class AltinnApplicationFactorySpec extends Specification {
         then:
         1 * downloadQueueClient.getFormSetPdf('archive-reference', 1044) >> ([0, 1, 2] as byte[])
         application.archiveReference == 'archive-reference'
-        application.countyNumberRequestor == '30'
-        application.organisationNumberSubject == 'reportee-id'
+        application.requestor == '30'
+        application.subject == 'reportee-id'
         application.serviceCode == 'service-code'
         application.languageCode == 1044
         application.status == AltinnApplicationStatus.NEW

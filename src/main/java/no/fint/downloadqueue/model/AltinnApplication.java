@@ -16,8 +16,8 @@ import java.util.List;
 public class AltinnApplication {
     @Id
     private String archiveReference;
-    private String countyNumberRequestor;
-    private String organisationNumberSubject;
+    private String requestor;
+    private String subject;
     private String serviceCode;
     private Integer languageCode;
     private Form form;

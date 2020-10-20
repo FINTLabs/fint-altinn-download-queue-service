@@ -42,9 +42,9 @@ public class AltinnApplicationFactory {
     private Consumer<AltinnApplication> addMetadata(DownloadQueueItemBE item) {
         return application -> {
             application.setArchiveReference(item.getArchiveReference().getValue());
-            application.setOrganisationNumberSubject(item.getReporteeID().getValue());
+            application.setSubject(item.getReporteeID().getValue());
             application.setServiceCode(item.getServiceCode().getValue());
-            getMetadata(item.getShipmentMetadataList().getValue(), countyNumber).ifPresent(application::setCountyNumberRequestor);
+            getMetadata(item.getShipmentMetadataList().getValue(), countyNumber).ifPresent(application::setRequestor);
             getMetadata(item.getShipmentMetadataList().getValue(), languageCode).map(Integer::parseInt).ifPresent(application::setLanguageCode);
         };
     }

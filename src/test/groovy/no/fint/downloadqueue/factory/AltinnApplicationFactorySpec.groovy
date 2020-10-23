@@ -41,8 +41,10 @@ class AltinnApplicationFactorySpec extends Specification {
         then:
         1 * downloadQueueClient.getFormSetPdf('archive-reference', 1044) >> ([0, 1, 2] as byte[])
         application.archiveReference == 'archive-reference'
-        application.requestor == '30'
+        application.requestor == '921693230'
+        application.requestorName == 'Viken'
         application.subject == 'reportee-id'
+        application.subjectName == 'Taxi AS'
         application.serviceCode == 'service-code'
         application.languageCode == 1044
         application.status == AltinnApplicationStatus.NEW
@@ -71,7 +73,9 @@ class AltinnApplicationFactorySpec extends Specification {
         return new ArchivedShipmentMetadataList(
                 archivedShipmentMetadata: [
                         newShipmentMetadata('language', '1044'),
-                        newShipmentMetadata('fylke', '30')
+                        newShipmentMetadata('fylke', 'Viken'),
+                        newShipmentMetadata('fylkesnummer', '3000'),
+                        newShipmentMetadata('innsender', 'Taxi AS')
                 ]
         )
     }

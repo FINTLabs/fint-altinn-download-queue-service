@@ -11,10 +11,14 @@ import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class AltinnApplicationFactory {
-    private final String countyNumber = "fylke";
+    private final String requestor = "fylkesnummer";
+    private final String requestorName = "fylke";
+    private final String subjectName = "innsender";
     private final String languageCode = "language";
     private final Integer defaultLanguageCode = 1044;
 
@@ -44,8 +48,14 @@ public class AltinnApplicationFactory {
             application.setArchiveReference(item.getArchiveReference().getValue());
             application.setSubject(item.getReporteeID().getValue());
             application.setServiceCode(item.getServiceCode().getValue());
-            getMetadata(item.getShipmentMetadataList().getValue(), countyNumber).ifPresent(application::setRequestor);
-            getMetadata(item.getShipmentMetadataList().getValue(), languageCode).map(Integer::parseInt).ifPresent(application::setLanguageCode);
+
+            ArchivedShipmentMetadataList metadata = item.getShipmentMetadataList().getValue();
+
+            getMetadata(metadata, requestor).map(countyNumberMapping::get).ifPresent(application::setRequestor);
+            getMetadata(metadata, requestorName).ifPresent(application::setRequestorName);
+            getMetadata(metadata, subjectName).ifPresent(application::setSubjectName);
+
+            application.setLanguageCode(getMetadata(metadata, languageCode).map(Integer::parseInt).orElse(defaultLanguageCode));
         };
     }
 
@@ -121,4 +131,18 @@ public class AltinnApplicationFactory {
                 .map(GregorianCalendar::toZonedDateTime)
                 .map(ZonedDateTime::toLocalDateTime);
     }
+
+    private final Map<String, String> countyNumberMapping = Stream.of(
+            new AbstractMap.SimpleImmutableEntry<>("3000", "921693230"), //Viken
+            new AbstractMap.SimpleImmutableEntry<>("0300", "958935420"), //Oslo
+            new AbstractMap.SimpleImmutableEntry<>("3400", "920717152"), //Innlandet
+            new AbstractMap.SimpleImmutableEntry<>("3800", "821227062"), //Vestfold og Telemark
+            new AbstractMap.SimpleImmutableEntry<>("4200", "921707134"), //Agder
+            new AbstractMap.SimpleImmutableEntry<>("1100", "971045698"), //Rogaland
+            new AbstractMap.SimpleImmutableEntry<>("4600", "821311632"), //Vestland
+            new AbstractMap.SimpleImmutableEntry<>("1500", "944183779"), //Møre og Romsdal
+            new AbstractMap.SimpleImmutableEntry<>("5000", "817920632"), //Trøndelang
+            new AbstractMap.SimpleImmutableEntry<>("1800", "964982953"), //Nordland
+            new AbstractMap.SimpleImmutableEntry<>("5400", "922420866")) //Troms og Finnmark
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 }

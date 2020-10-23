@@ -66,9 +66,14 @@ public class AltinnApplicationService {
                 archivedFormTask = downloadQueueClient.getArchivedFormTask(archiveReference);
 
                 archivedFormTask.ifPresent(formTask -> {
-                    AltinnApplication altinnApplication = altinnApplicationFactory.of(downloadQueueItem, formTask);
+                    AltinnApplication application = altinnApplicationFactory.of(downloadQueueItem, formTask);
 
-                    altinnApplicationRepository.save(altinnApplication);
+                    if (application.getRequestor() == null) {
+                        log.warn("Missing/invalid requestor for archive reference: {}", archiveReference);
+                        return;
+                    }
+
+                    altinnApplicationRepository.save(application);
 
                     log.info("Created from archive reference: {}", archiveReference);
                 });

@@ -30,7 +30,7 @@ class AltinnApplicationServiceSpec extends Specification {
         1 * client.getDownloadQueueItems() >> [item]
         1 * repository.existsById(_ as String) >> false
         1 * client.getArchivedFormTask(_ as String) >> Optional.of(task)
-        1 * factory.of(_, _) >> new AltinnApplication()
+        1 * factory.of(_, _) >> new AltinnApplication(requestor: 'requestor')
         1 * repository.save(_)
     }
 

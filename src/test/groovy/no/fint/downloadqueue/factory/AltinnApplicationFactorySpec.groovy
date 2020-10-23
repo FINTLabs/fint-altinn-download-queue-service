@@ -74,7 +74,7 @@ class AltinnApplicationFactorySpec extends Specification {
                 archivedShipmentMetadata: [
                         newShipmentMetadata('language', '1044'),
                         newShipmentMetadata('fylke', 'Viken'),
-                        newShipmentMetadata('fylkesnummer', '3000'),
+                        newShipmentMetadata('fylkesnummer', '30'),
                         newShipmentMetadata('innsender', 'Taxi AS')
                 ]
         )

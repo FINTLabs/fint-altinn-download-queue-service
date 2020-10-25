@@ -1,9 +1,6 @@
 package no.fint.downloadqueue.model;
 
 import no.altinn.downloadqueue.wsdl.*;
-import no.fint.downloadqueue.client.AttachmentDataStreamedClient;
-import no.fint.downloadqueue.client.DownloadQueueClient;
-import org.springframework.stereotype.Component;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -14,23 +11,17 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Component
 public class AltinnApplicationFactory {
-    private final String requestor = "fylkesnummer";
-    private final String requestorName = "fylke";
-    private final String subjectName = "innsender";
-    private final String languageCode = "language";
-    private final Integer defaultLanguageCode = 1044;
+    private final static String REQUESTOR = "fylkesnummer";
+    private final static String REQUESTOR_NAME = "fylke";
+    private final static String SUBJECT_NAME = "innsender";
+    private final static String LANGUAGE_CODE = "language";
+    private final static Integer DEFAULT_LANGUAGE_CODE = 1044;
 
-    private final DownloadQueueClient downloadQueueClient;
-    private final AttachmentDataStreamedClient attachmentDataStreamedClient;
-
-    public AltinnApplicationFactory(DownloadQueueClient downloadQueueClient, AttachmentDataStreamedClient attachmentDataStreamedClient) {
-        this.downloadQueueClient = downloadQueueClient;
-        this.attachmentDataStreamedClient = attachmentDataStreamedClient;
+    public AltinnApplicationFactory() {
     }
 
-    public AltinnApplication of(DownloadQueueItemBE item, ArchivedFormTaskDQBE archivedFormTask) {
+    public static AltinnApplication of(DownloadQueueItemBE item, ArchivedFormTaskDQBE archivedFormTask) {
         AltinnApplication altinnApplication = new AltinnApplication();
 
         addMetadata(item)
@@ -43,23 +34,25 @@ public class AltinnApplicationFactory {
         return altinnApplication;
     }
 
-    private Consumer<AltinnApplication> addMetadata(DownloadQueueItemBE item) {
+    private static Consumer<AltinnApplication> addMetadata(DownloadQueueItemBE item) {
         return application -> {
             application.setArchiveReference(item.getArchiveReference().getValue());
             application.setSubject(item.getReporteeID().getValue());
             application.setServiceCode(item.getServiceCode().getValue());
 
+            getDateTime(item.getArchivedDate()).ifPresent(application::setArchivedDate);
+
             ArchivedShipmentMetadataList metadata = item.getShipmentMetadataList().getValue();
 
-            getMetadata(metadata, requestor).map(countyNumberMapping::get).ifPresent(application::setRequestor);
-            getMetadata(metadata, requestorName).ifPresent(application::setRequestorName);
-            getMetadata(metadata, subjectName).ifPresent(application::setSubjectName);
+            getMetadata(metadata, REQUESTOR).map(countyNumberMapping::get).ifPresent(application::setRequestor);
+            getMetadata(metadata, REQUESTOR_NAME).ifPresent(application::setRequestorName);
+            getMetadata(metadata, SUBJECT_NAME).ifPresent(application::setSubjectName);
 
-            application.setLanguageCode(getMetadata(metadata, languageCode).map(Integer::parseInt).orElse(defaultLanguageCode));
+            application.setLanguageCode(getMetadata(metadata, LANGUAGE_CODE).map(Integer::parseInt).orElse(DEFAULT_LANGUAGE_CODE));
         };
     }
 
-    private Consumer<AltinnApplication> addForms(ArchivedFormTaskDQBE archivedFormTask) {
+    private static Consumer<AltinnApplication> addForms(ArchivedFormTaskDQBE archivedFormTask) {
         return altinnApplication -> Optional.ofNullable(archivedFormTask)
                 .map(ArchivedFormTaskDQBE::getForms)
                 .map(JAXBElement::getValue)
@@ -72,21 +65,11 @@ public class AltinnApplicationFactory {
 
                     form.setFormData(archivedForm.getFormData().getValue());
 
-                    byte[] formDataPdf;
-
-                    if (altinnApplication.getLanguageCode() == null) {
-                        formDataPdf = downloadQueueClient.getFormSetPdf(altinnApplication.getArchiveReference(), defaultLanguageCode);
-                    } else {
-                        formDataPdf = downloadQueueClient.getFormSetPdf(altinnApplication.getArchiveReference(), altinnApplication.getLanguageCode());
-                    }
-
-                    form.setFormDataPdf(formDataPdf);
-
                     altinnApplication.setForm(form);
                 });
     }
 
-    private Consumer<AltinnApplication> addAttachments(ArchivedFormTaskDQBE archivedFormTask) {
+    private static Consumer<AltinnApplication> addAttachments(ArchivedFormTaskDQBE archivedFormTask) {
         return altinnApplication -> Optional.ofNullable(archivedFormTask)
                 .map(ArchivedFormTaskDQBE::getAttachments)
                 .map(JAXBElement::getValue)
@@ -95,26 +78,16 @@ public class AltinnApplicationFactory {
                 .forEach(archivedAttachment -> {
                     AltinnApplication.Attachment attachment = new AltinnApplication.Attachment();
 
-                    byte[] attachmentData;
-
-                    if (archivedAttachment.getAttachmentData() == null) {
-                        attachmentData = attachmentDataStreamedClient.getAttachmentDataStreamed(archivedAttachment.getAttachmentId());
-                    } else {
-                        attachmentData = archivedAttachment.getAttachmentData().getValue();
-                    }
-
-                    attachment.setAttachmentData(attachmentData);
-
                     attachment.setAttachmentId(archivedAttachment.getAttachmentId());
                     attachment.setAttachmentType(archivedAttachment.getAttachmentType().getValue());
                     attachment.setAttachmentTypeName(archivedAttachment.getAttachmentTypeName().getValue());
                     attachment.setAttachmentTypeNameLanguage(archivedAttachment.getAttachmentTypeNameLanguage().getValue());
 
-                    altinnApplication.getAttachments().add(attachment);
+                    altinnApplication.getAttachments().put(attachment.getAttachmentId(), attachment);
                 });
     }
 
-    private Optional<String> getMetadata(ArchivedShipmentMetadataList metadataList, String key) {
+    private static Optional<String> getMetadata(ArchivedShipmentMetadataList metadataList, String key) {
         return Optional.ofNullable(metadataList)
                 .map(ArchivedShipmentMetadataList::getArchivedShipmentMetadata)
                 .orElseGet(Collections::emptyList)
@@ -125,14 +98,14 @@ public class AltinnApplicationFactory {
                 .findAny();
     }
 
-    private Optional<LocalDateTime> getDateTime(XMLGregorianCalendar dateTime) {
+    private static Optional<LocalDateTime> getDateTime(XMLGregorianCalendar dateTime) {
         return Optional.ofNullable(dateTime)
                 .map(XMLGregorianCalendar::toGregorianCalendar)
                 .map(GregorianCalendar::toZonedDateTime)
                 .map(ZonedDateTime::toLocalDateTime);
     }
 
-    private final Map<String, String> countyNumberMapping = Stream.of(
+    private static final Map<String, String> countyNumberMapping = Stream.of(
             new AbstractMap.SimpleImmutableEntry<>("30", "921693230"), //Viken
             new AbstractMap.SimpleImmutableEntry<>("03", "958935420"), //Oslo
             new AbstractMap.SimpleImmutableEntry<>("34", "920717152"), //Innlandet

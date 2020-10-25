@@ -8,14 +8,15 @@ import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Data
 @Document
 public class AltinnApplication {
     @Id
     private String archiveReference;
+    private LocalDateTime archivedDate;
     private String requestor;
     private String requestorName;
     private String subject;
@@ -23,7 +24,7 @@ public class AltinnApplication {
     private String serviceCode;
     private Integer languageCode;
     private Form form;
-    private List<Attachment> attachments = new ArrayList<>();
+    private Map<Integer, Attachment> attachments = new HashMap<>();
     private AltinnApplicationStatus status;
 
     @Version
@@ -38,13 +39,11 @@ public class AltinnApplication {
     @Data
     public static class Form {
         private String formData;
-        private byte[] formDataPdf;
     }
 
     @Data
     public static class Attachment {
         private Integer attachmentId;
-        private byte[] attachmentData;
         private String attachmentType;
         private String attachmentTypeName;
         private String attachmentTypeNameLanguage;

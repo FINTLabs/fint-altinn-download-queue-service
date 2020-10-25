@@ -4,24 +4,22 @@ import no.altinn.downloadqueue.wsdl.DownloadQueueItemBE
 import no.altinn.downloadqueue.wsdl.ObjectFactory
 import no.fint.downloadqueue.client.DownloadQueueClient
 import no.fint.downloadqueue.model.AltinnApplication
-import no.fint.downloadqueue.model.AltinnApplicationFactory
 import no.fint.downloadqueue.repository.AltinnApplicationRepository
+import no.fint.downloadqueue.util.DownloadQueueObjectFactory
 import spock.lang.Specification
 
 class AltinnApplicationServiceSpec extends Specification {
     AltinnApplicationRepository repository = Mock()
     DownloadQueueClient client = Mock()
-    AltinnApplicationFactory factory = Mock()
 
     ObjectFactory objectFactory = new ObjectFactory()
 
-    AltinnApplicationService service = new AltinnApplicationService(client, repository, factory)
+    AltinnApplicationService service = new AltinnApplicationService(client, repository)
 
     def "create altinn application if application does not exist"() {
         given:
-        def item = new DownloadQueueItemBE(
-                archiveReference: objectFactory.createDownloadQueueItemBEArchiveReference('archive-reference'))
-        def task = objectFactory.createArchivedFormTaskDQBE()
+        def item = DownloadQueueObjectFactory.newDownloadQueueItem()
+        def task = DownloadQueueObjectFactory.newArchivedFormTask()
 
         when:
         service.create()
@@ -30,7 +28,6 @@ class AltinnApplicationServiceSpec extends Specification {
         1 * client.getDownloadQueueItems() >> [item]
         1 * repository.existsById(_ as String) >> false
         1 * client.getArchivedFormTask(_ as String) >> Optional.of(task)
-        1 * factory.of(_, _) >> new AltinnApplication(requestor: 'requestor')
         1 * repository.save(_)
     }
 

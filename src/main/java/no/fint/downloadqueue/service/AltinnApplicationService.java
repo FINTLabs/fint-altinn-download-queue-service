@@ -67,7 +67,7 @@ public class AltinnApplicationService {
                     AltinnApplication application = AltinnApplicationFactory.of(downloadQueueItem, formTask);
 
                     if (application.getRequestor() == null) {
-                        log.warn("Missing/invalid requestor for archive reference: {}", archiveReference);
+                        log.warn("Requestor not found for archive reference: {}", archiveReference);
                         return;
                     }
 
@@ -86,7 +86,7 @@ public class AltinnApplicationService {
     public void purge() {
         List<AltinnApplication> altinnApplications = altinnApplicationRepository.findByStatus(AltinnApplicationStatus.ARCHIVED);
 
-        log.info("{} items in DownloadQueue ready for purge", altinnApplications.size());
+        log.info("{} items in DownloadQueue to be purged", altinnApplications.size());
 
         altinnApplications.forEach(altinnApplication -> {
             try {

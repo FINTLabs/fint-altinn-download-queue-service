@@ -17,7 +17,7 @@ class AttachmentControllerSpec extends Specification {
     void setup() {
         mockMvc = MockMvcBuilders
                 .standaloneSetup(controller)
-                .build();
+                .build()
     }
 
     def "Get attachment returns byte array"() {

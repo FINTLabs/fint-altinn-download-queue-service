@@ -1,7 +1,6 @@
 package no.fint.downloadqueue.model;
 
 import no.altinn.downloadqueue.wsdl.*;
-import org.springframework.stereotype.Component;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.datatype.XMLGregorianCalendar;

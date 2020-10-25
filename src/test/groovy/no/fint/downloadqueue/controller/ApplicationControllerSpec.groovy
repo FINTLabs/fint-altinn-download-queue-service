@@ -17,7 +17,7 @@ class ApplicationControllerSpec extends Specification {
     void setup() {
         mockMvc = MockMvcBuilders
                 .standaloneSetup(controller)
-                .build();
+                .build()
     }
 
     def "Get application returns byte array"() {

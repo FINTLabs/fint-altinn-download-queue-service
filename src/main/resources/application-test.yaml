@@ -12,5 +12,4 @@ altinn:
 spring:
   data:
     mongodb:
-      database: altinn
-      port: 27017
+      database: altinn-test

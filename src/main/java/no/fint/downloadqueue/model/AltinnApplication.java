@@ -16,6 +16,7 @@ import java.util.List;
 public class AltinnApplication {
     @Id
     private String archiveReference;
+    private LocalDateTime archivedDate;
     private String requestor;
     private String requestorName;
     private String subject;
@@ -38,15 +39,14 @@ public class AltinnApplication {
     @Data
     public static class Form {
         private String formData;
-        private byte[] formDataPdf;
     }
 
     @Data
     public static class Attachment {
         private Integer attachmentId;
-        private byte[] attachmentData;
         private String attachmentType;
         private String attachmentTypeName;
         private String attachmentTypeNameLanguage;
+        private String fileName;
     }
 }

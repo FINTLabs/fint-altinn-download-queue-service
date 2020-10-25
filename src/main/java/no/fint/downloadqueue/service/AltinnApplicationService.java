@@ -21,12 +21,10 @@ import java.util.Optional;
 public class AltinnApplicationService {
     private final DownloadQueueClient downloadQueueClient;
     private final AltinnApplicationRepository altinnApplicationRepository;
-    private final AltinnApplicationFactory altinnApplicationFactory;
 
-    public AltinnApplicationService(DownloadQueueClient downloadQueueClient, AltinnApplicationRepository altinnApplicationRepository, AltinnApplicationFactory altinnApplicationFactory) {
+    public AltinnApplicationService(DownloadQueueClient downloadQueueClient, AltinnApplicationRepository altinnApplicationRepository) {
         this.downloadQueueClient = downloadQueueClient;
         this.altinnApplicationRepository = altinnApplicationRepository;
-        this.altinnApplicationFactory = altinnApplicationFactory;
     }
 
     @Scheduled(initialDelayString = "${scheduling.initial-delay}", fixedDelayString = "${scheduling.fixed-delay}")
@@ -66,7 +64,7 @@ public class AltinnApplicationService {
                 archivedFormTask = downloadQueueClient.getArchivedFormTask(archiveReference);
 
                 archivedFormTask.ifPresent(formTask -> {
-                    AltinnApplication application = altinnApplicationFactory.of(downloadQueueItem, formTask);
+                    AltinnApplication application = AltinnApplicationFactory.of(downloadQueueItem, formTask);
 
                     if (application.getRequestor() == null) {
                         log.warn("Missing/invalid requestor for archive reference: {}", archiveReference);

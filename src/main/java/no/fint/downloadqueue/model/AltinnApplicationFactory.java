@@ -82,9 +82,8 @@ public class AltinnApplicationFactory {
                     attachment.setAttachmentType(archivedAttachment.getAttachmentType().getValue());
                     attachment.setAttachmentTypeName(archivedAttachment.getAttachmentTypeName().getValue());
                     attachment.setAttachmentTypeNameLanguage(archivedAttachment.getAttachmentTypeNameLanguage().getValue());
-                    attachment.setFileName(archivedAttachment.getFileName().getValue());
 
-                    altinnApplication.getAttachments().add(attachment);
+                    altinnApplication.getAttachments().put(attachment.getAttachmentId(), attachment);
                 });
     }
 

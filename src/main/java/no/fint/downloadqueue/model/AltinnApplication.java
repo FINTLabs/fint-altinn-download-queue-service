@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.http.MediaType;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -44,7 +45,7 @@ public class AltinnApplication {
     @Data
     public static class Attachment {
         private Integer attachmentId;
-        private String attachmentType;
+        private MediaType attachmentType;
         private String attachmentTypeName;
         private String attachmentTypeNameLanguage;
         private String fileName;

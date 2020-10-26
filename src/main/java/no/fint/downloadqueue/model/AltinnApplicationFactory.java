@@ -1,6 +1,8 @@
 package no.fint.downloadqueue.model;
 
 import no.altinn.downloadqueue.wsdl.*;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.MediaType;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -79,10 +81,14 @@ public class AltinnApplicationFactory {
                     AltinnApplication.Attachment attachment = new AltinnApplication.Attachment();
 
                     attachment.setAttachmentId(archivedAttachment.getAttachmentId());
-                    attachment.setAttachmentType(archivedAttachment.getAttachmentType().getValue().replace("_", "/"));
                     attachment.setAttachmentTypeName(archivedAttachment.getAttachmentTypeName().getValue());
                     attachment.setAttachmentTypeNameLanguage(archivedAttachment.getAttachmentTypeNameLanguage().getValue());
-                    attachment.setFileName(archivedAttachment.getFileName().getValue());
+
+                    MediaType mediaType = MediaType.parseMediaType(archivedAttachment.getAttachmentType().getValue().replace("_", "/"));
+                    attachment.setAttachmentType(mediaType);
+
+                    String fileExtension = StringUtils.substringAfterLast(archivedAttachment.getFileName().getValue(), ".");
+                    attachment.setFileName(archivedAttachment.getAttachmentTypeName().getValue().concat("." + fileExtension));
 
                     altinnApplication.getAttachments().put(attachment.getAttachmentId(), attachment);
                 });

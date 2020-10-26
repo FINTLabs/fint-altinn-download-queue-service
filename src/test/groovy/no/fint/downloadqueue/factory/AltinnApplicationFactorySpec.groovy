@@ -3,6 +3,7 @@ package no.fint.downloadqueue.factory
 import no.fint.downloadqueue.model.AltinnApplicationFactory
 import no.fint.downloadqueue.model.AltinnApplicationStatus
 import no.fint.downloadqueue.util.DownloadQueueObjectFactory
+import org.springframework.http.MediaType
 import spock.lang.Specification
 
 import java.time.LocalDateTime
@@ -30,9 +31,9 @@ class AltinnApplicationFactorySpec extends Specification {
         application.status == AltinnApplicationStatus.NEW
         application.form.formData == '<xml>'
         application.attachments.values().first().attachmentId == 0
-        application.attachments.values().first().attachmentType == 'attachment/type'
+        application.attachments.values().first().attachmentType == MediaType.APPLICATION_PDF
         application.attachments.values().first().attachmentTypeName == 'attachment-type-name'
         application.attachments.values().first().attachmentTypeNameLanguage == 'attachment-type-name-language'
-        application.attachments.values().first().fileName == 'filename'
+        application.attachments.values().first().fileName == 'attachment-type-name.pdf'
     }
 }

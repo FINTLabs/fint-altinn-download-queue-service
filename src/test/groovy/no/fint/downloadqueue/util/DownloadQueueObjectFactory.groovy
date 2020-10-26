@@ -86,10 +86,10 @@ class DownloadQueueObjectFactory {
                         new ArchivedAttachmentDQBE(
                                 attachmentId: 0,
                                 attachmentData: objectFactory.createArchivedAttachmentDQBEAttachmentData([0, 1, 2] as byte[]),
-                                attachmentType: objectFactory.createArchivedAttachmentDQBEAttachmentType('attachment_type'),
+                                attachmentType: objectFactory.createArchivedAttachmentDQBEAttachmentType('application_pdf'),
                                 attachmentTypeName: objectFactory.createArchivedAttachmentDQBEAttachmentTypeName('attachment-type-name'),
                                 attachmentTypeNameLanguage: objectFactory.createArchivedAttachmentDQBEAttachmentTypeNameLanguage('attachment-type-name-language'),
-                                fileName: objectFactory.createArchivedAttachmentDQBEFileName('filename')
+                                fileName: objectFactory.createArchivedAttachmentDQBEFileName('filename.pdf')
                         )
                 ]
         )

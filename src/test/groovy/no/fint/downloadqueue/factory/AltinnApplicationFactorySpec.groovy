@@ -30,8 +30,9 @@ class AltinnApplicationFactorySpec extends Specification {
         application.status == AltinnApplicationStatus.NEW
         application.form.formData == '<xml>'
         application.attachments.values().first().attachmentId == 0
-        application.attachments.values().first().attachmentType == 'attachment-type'
+        application.attachments.values().first().attachmentType == 'attachment/type'
         application.attachments.values().first().attachmentTypeName == 'attachment-type-name'
         application.attachments.values().first().attachmentTypeNameLanguage == 'attachment-type-name-language'
+        application.attachments.values().first().fileName == 'filename'
     }
 }

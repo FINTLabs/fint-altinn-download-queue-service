@@ -47,5 +47,6 @@ public class AltinnApplication {
         private String attachmentType;
         private String attachmentTypeName;
         private String attachmentTypeNameLanguage;
+        private String fileName;
     }
 }

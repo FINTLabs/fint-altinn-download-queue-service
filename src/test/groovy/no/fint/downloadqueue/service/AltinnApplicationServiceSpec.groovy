@@ -49,7 +49,7 @@ class AltinnApplicationServiceSpec extends Specification {
         service.purge()
 
         then:
-        1 * repository.findByStatus(_) >> [new AltinnApplication()]
+        1 * repository.findAllByStatus(_) >> [new AltinnApplication()]
         1 * repository.findById(_) >> Optional.of(new AltinnApplication())
         1 * client.purgeItem(_) >> Optional.of('purged')
         1 * repository.save(_)
@@ -60,6 +60,6 @@ class AltinnApplicationServiceSpec extends Specification {
         service.purge()
 
         then:
-        1 * repository.findByStatus(_) >> []
+        1 * repository.findAllByStatus(_) >> []
     }
 }

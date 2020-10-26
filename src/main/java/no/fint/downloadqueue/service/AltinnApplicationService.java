@@ -84,7 +84,7 @@ public class AltinnApplicationService {
     }
 
     public void purge() {
-        List<AltinnApplication> altinnApplications = altinnApplicationRepository.findByStatus(AltinnApplicationStatus.ARCHIVED);
+        List<AltinnApplication> altinnApplications = altinnApplicationRepository.findAllByStatus(AltinnApplicationStatus.ARCHIVED);
 
         log.info("{} items in DownloadQueue to be purged", altinnApplications.size());
 

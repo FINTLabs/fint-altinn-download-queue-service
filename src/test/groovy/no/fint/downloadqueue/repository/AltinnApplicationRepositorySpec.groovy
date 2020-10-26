@@ -19,7 +19,7 @@ class AltinnApplicationRepositorySpec extends Specification {
                 new AltinnApplication(status: AltinnApplicationStatus.ARCHIVED)))
 
         when:
-        def documents = repository.findByStatus(AltinnApplicationStatus.ARCHIVED)
+        def documents = repository.findAllByStatus(AltinnApplicationStatus.ARCHIVED)
 
         then:
         documents.size() == 2

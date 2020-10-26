@@ -45,7 +45,7 @@ public class AltinnApplication {
     @Data
     public static class Attachment {
         private Integer attachmentId;
-        private MediaType attachmentType;
+        private String attachmentType;
         private String attachmentTypeName;
         private String attachmentTypeNameLanguage;
         private String fileName;

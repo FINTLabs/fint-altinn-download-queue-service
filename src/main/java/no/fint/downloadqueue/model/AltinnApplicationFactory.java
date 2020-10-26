@@ -85,7 +85,8 @@ public class AltinnApplicationFactory {
                     attachment.setAttachmentTypeNameLanguage(archivedAttachment.getAttachmentTypeNameLanguage().getValue());
 
                     MediaType mediaType = MediaType.parseMediaType(archivedAttachment.getAttachmentType().getValue().replace("_", "/"));
-                    attachment.setAttachmentType(mediaType);
+
+                    attachment.setAttachmentType(mediaType.toString());
 
                     String fileExtension = StringUtils.substringAfterLast(archivedAttachment.getFileName().getValue(), ".");
                     attachment.setFileName(archivedAttachment.getAttachmentTypeName().getValue().concat("." + fileExtension));

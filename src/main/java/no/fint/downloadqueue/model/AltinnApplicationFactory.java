@@ -2,6 +2,7 @@ package no.fint.downloadqueue.model;
 
 import no.altinn.downloadqueue.wsdl.*;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.InvalidMediaTypeException;
 import org.springframework.http.MediaType;
 
 import javax.xml.bind.JAXBElement;
@@ -84,9 +85,14 @@ public class AltinnApplicationFactory {
                     attachment.setAttachmentTypeName(archivedAttachment.getAttachmentTypeName().getValue());
                     attachment.setAttachmentTypeNameLanguage(archivedAttachment.getAttachmentTypeNameLanguage().getValue());
 
-                    MediaType mediaType = MediaType.parseMediaType(archivedAttachment.getAttachmentType().getValue().replace("_", "/"));
+                    String attachmentType = archivedAttachment.getAttachmentType().getValue().replaceFirst("_", "/");
 
-                    attachment.setAttachmentType(mediaType.toString());
+                    try {
+                        MediaType mediaType = MediaType.parseMediaType(attachmentType);
+                        attachment.setAttachmentType(mediaType.toString());
+                    } catch (InvalidMediaTypeException ex) {
+                        attachment.setAttachmentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+                    }
 
                     String fileExtension = StringUtils.substringAfterLast(archivedAttachment.getFileName().getValue(), ".");
                     attachment.setFileName(archivedAttachment.getAttachmentTypeName().getValue().concat("." + fileExtension));

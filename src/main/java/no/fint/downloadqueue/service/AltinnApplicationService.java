@@ -29,10 +29,8 @@ public class AltinnApplicationService {
 
     @Scheduled(initialDelayString = "${scheduling.initial-delay}", fixedDelayString = "${scheduling.fixed-delay}")
     public void run() {
-        log.info("Create...");
         create();
 
-        log.info("Purge...");
         purge();
     }
 

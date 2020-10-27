@@ -20,11 +20,11 @@ import java.util.Optional;
 @Service
 public class AltinnApplicationService {
     private final DownloadQueueClient downloadQueueClient;
-    private final AltinnApplicationRepository altinnApplicationRepository;
+    private final AltinnApplicationRepository repository;
 
-    public AltinnApplicationService(DownloadQueueClient downloadQueueClient, AltinnApplicationRepository altinnApplicationRepository) {
+    public AltinnApplicationService(DownloadQueueClient downloadQueueClient, AltinnApplicationRepository repository) {
         this.downloadQueueClient = downloadQueueClient;
-        this.altinnApplicationRepository = altinnApplicationRepository;
+        this.repository = repository;
     }
 
     @Scheduled(initialDelayString = "${scheduling.initial-delay}", fixedDelayString = "${scheduling.fixed-delay}")
@@ -52,7 +52,7 @@ public class AltinnApplicationService {
         downloadQueueItems.forEach(downloadQueueItem -> {
             String archiveReference = downloadQueueItem.getArchiveReference().getValue();
 
-            if (altinnApplicationRepository.existsById(archiveReference)) {
+            if (repository.existsById(archiveReference)) {
                 return;
             }
 
@@ -69,7 +69,7 @@ public class AltinnApplicationService {
                         return;
                     }
 
-                    altinnApplicationRepository.save(application);
+                    repository.save(application);
 
                     log.info("Created from archive reference: {}", archiveReference);
                 });
@@ -82,23 +82,21 @@ public class AltinnApplicationService {
     }
 
     public void purge() {
-        List<AltinnApplication> altinnApplications = altinnApplicationRepository.findAllByStatus(AltinnApplicationStatus.ARCHIVED);
+        List<AltinnApplication> applications = repository.findAllByStatus(AltinnApplicationStatus.ARCHIVED);
 
-        log.info("{} items in DownloadQueue to be purged", altinnApplications.size());
+        log.info("{} items in DownloadQueue to be purged", applications.size());
 
-        altinnApplications.forEach(altinnApplication -> {
+        applications.forEach(application -> {
             try {
-                altinnApplicationRepository.findById(altinnApplication.getArchiveReference()).ifPresent(application -> {
-                    Optional<String> response = downloadQueueClient.purgeItem(application.getArchiveReference());
+                Optional<String> response = downloadQueueClient.purgeItem(application.getArchiveReference());
 
-                    if (response.isPresent()) {
-                        application.setStatus(AltinnApplicationStatus.PURGED);
+                if (response.map("OK"::equals).isPresent()) {
+                    application.setStatus(AltinnApplicationStatus.PURGED);
 
-                        altinnApplicationRepository.save(application);
+                    repository.save(application);
 
-                        log.info("Purged from archive reference: {}", application.getArchiveReference());
-                    }
-                });
+                    log.info("Purged from archive reference: {}", application.getArchiveReference());
+                }
             } catch (AltinnFaultException ex) {
                 log.error(altinnFaultToString(ex.getAltinnFault()));
             } catch (Exception ex) {

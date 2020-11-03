@@ -1,5 +1,6 @@
 package no.fint.downloadqueue.model;
 
+import lombok.extern.slf4j.Slf4j;
 import no.altinn.downloadqueue.wsdl.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.InvalidMediaTypeException;
@@ -14,6 +15,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Slf4j
 public class AltinnApplicationFactory {
     private final static String REQUESTOR = "fylkesnummer";
     private final static String REQUESTOR_NAME = "fylke";
@@ -95,6 +97,12 @@ public class AltinnApplicationFactory {
                     }
 
                     String fileExtension = StringUtils.substringAfterLast(archivedAttachment.getFileName().getValue(), ".");
+
+                    if (fileExtension.isEmpty()) {
+                        log.warn("Missing file extension for attachment {} of archive reference {}", attachment.getAttachmentId(), archivedAttachment.getArchiveReference());
+                        fileExtension = "taxi";
+                    }
+
                     attachment.setFileName(archivedAttachment.getAttachmentTypeName().getValue().concat("." + fileExtension));
 
                     altinnApplication.getAttachments().put(attachment.getAttachmentId(), attachment);

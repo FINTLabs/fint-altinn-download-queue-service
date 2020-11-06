@@ -64,11 +64,6 @@ public class AltinnApplicationService {
                 archivedFormTask.ifPresent(formTask -> {
                     AltinnApplication application = AltinnApplicationFactory.of(downloadQueueItem, formTask);
 
-                    if (application.getRequestor() == null) {
-                        log.warn("Requestor not found for archive reference: {}", archiveReference);
-                        return;
-                    }
-
                     repository.save(application);
 
                     log.info("Created from archive reference: {}", archiveReference);

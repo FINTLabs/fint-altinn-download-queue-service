@@ -36,7 +36,7 @@ public class AltinnApplicationFactory {
                 .andThen(addAttachments(archivedFormTask))
                 .accept(altinnApplication);
 
-        if (altinnApplication.getRequestor().isEmpty()) {
+        if (altinnApplication.getRequestor() == null) {
             altinnApplication.setStatus(AltinnApplicationStatus.DATA_MISSING);
         } else {
             altinnApplication.setStatus(AltinnApplicationStatus.NEW);
@@ -72,6 +72,7 @@ public class AltinnApplicationFactory {
 
                     try {
                         AltinnForm altinnForm = objectMapper.readValue(archivedForm.getFormData().getValue(), AltinnForm.class);
+
                         Optional.ofNullable(altinnForm)
                                 .map(AltinnForm::getInnsender)
                                 .map(submitter -> {
@@ -82,7 +83,7 @@ public class AltinnApplicationFactory {
                                 })
                                 .map(AltinnForm.Innsender::getOrganisasjon)
                                 .ifPresent(organisation -> {
-                                    String requestor = countyNumberMapping.getOrDefault(organisation.getFylkenummer(), "");
+                                    String requestor = countyNumberMapping.get(organisation.getFylkenummer());
 
                                     altinnApplication.setRequestor(requestor);
                                     altinnApplication.setRequestorName(organisation.getFylke());

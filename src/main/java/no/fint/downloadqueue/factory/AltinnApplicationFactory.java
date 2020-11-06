@@ -74,29 +74,29 @@ public class AltinnApplicationFactory {
                         AltinnForm altinnForm = objectMapper.readValue(archivedForm.getFormData().getValue(), AltinnForm.class);
 
                         Optional.ofNullable(altinnForm)
-                                .map(AltinnForm::getInnsender)
+                                .map(AltinnForm::getSubmitter)
                                 .map(submitter -> {
                                     Integer languageCode = Optional.ofNullable(submitter.getLanguage()).map(Integer::parseInt).orElse(DEFAULT_LANGUAGE_CODE);
                                     altinnApplication.setLanguageCode(languageCode);
 
                                     return submitter;
                                 })
-                                .map(AltinnForm.Innsender::getOrganisasjon)
+                                .map(AltinnForm.Submitter::getOrganisation)
                                 .ifPresent(organisation -> {
-                                    String requestor = countyNumberMapping.get(organisation.getFylkenummer());
+                                    String requestor = countyNumberMapping.get(organisation.getCountyNumber());
 
                                     altinnApplication.setRequestor(requestor);
-                                    altinnApplication.setRequestorName(organisation.getFylke());
-                                    altinnApplication.setSubjectName(organisation.getNavn());
-                                    altinnApplication.setPhone(organisation.getTelefonnummer());
-                                    altinnApplication.setEmail(organisation.getEpost());
+                                    altinnApplication.setRequestorName(organisation.getCounty());
+                                    altinnApplication.setSubjectName(organisation.getName());
+                                    altinnApplication.setPhone(organisation.getPhone());
+                                    altinnApplication.setEmail(organisation.getEmail());
 
                                     AltinnApplication.Address businessAddress = new AltinnApplication.Address();
-                                    Optional.ofNullable(organisation.getForretningsadresse())
+                                    Optional.ofNullable(organisation.getBusinessAddress())
                                             .ifPresent(address -> {
-                                                businessAddress.setAddress(address.getAdresse());
-                                                businessAddress.setPostCode(address.getPostnummer());
-                                                businessAddress.setPostalArea(address.getPoststed());
+                                                businessAddress.setAddress(address.getAddress());
+                                                businessAddress.setPostCode(address.getPostCode());
+                                                businessAddress.setPostalArea(address.getPostalArea());
                                             });
 
                                     altinnApplication.setBusinessAddress(businessAddress);

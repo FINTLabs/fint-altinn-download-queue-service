@@ -6,50 +6,50 @@ import lombok.Data;
 @Data
 public class AltinnForm {
     @JacksonXmlProperty(localName = "Innsender")
-    private Innsender innsender;
+    private Submitter submitter;
 
     @Data
-    public static class Innsender {
+    public static class Submitter {
         @JacksonXmlProperty(localName = "language")
         private String language;
 
         @JacksonXmlProperty(localName = "Organisasjon")
-        private Organisasjon organisasjon;
+        private Organisation organisation;
     }
 
     @Data
-    public static class Organisasjon {
+    public static class Organisation {
         @JacksonXmlProperty(localName = "organisasjonsnummer")
-        private String organisasjonsnummer;
+        private String organisationNumber;
 
         @JacksonXmlProperty(localName = "navn")
-        private String navn;
+        private String name;
 
         @JacksonXmlProperty(localName = "Forretningsadresse")
-        private Adresse forretningsadresse;
+        private Address businessAddress;
 
         @JacksonXmlProperty(localName = "telefonnummer")
-        private String telefonnummer;
+        private String phone;
 
         @JacksonXmlProperty(localName = "epost")
-        private String epost;
+        private String email;
 
         @JacksonXmlProperty(localName = "fylke")
-        private String fylke;
+        private String county;
 
         @JacksonXmlProperty(localName = "fylkenummer")
-        private String fylkenummer;
+        private String countyNumber;
     }
 
     @Data
-    public static class Adresse {
+    public static class Address {
         @JacksonXmlProperty(localName = "adresse")
-        private String adresse;
+        private String address;
 
         @JacksonXmlProperty(localName = "postnummer")
-        private String postnummer;
+        private String postCode;
 
         @JacksonXmlProperty(localName = "poststed")
-        private String poststed;
+        private String postalArea;
     }
 }

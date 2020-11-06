@@ -50,15 +50,15 @@ class AltinnApplicationFactorySpec extends Specification {
                 .readValue(DownloadQueueObjectFactory.newFormData(), AltinnForm.class)
 
         then:
-        form.innsender.organisasjon.organisasjonsnummer == '123456789'
-        form.innsender.organisasjon.navn == 'Taxi AS'
-        form.innsender.organisasjon.forretningsadresse.adresse == 'address'
-        form.innsender.organisasjon.forretningsadresse.postnummer == 'post-code'
-        form.innsender.organisasjon.forretningsadresse.poststed == 'postal-area'
-        form.innsender.organisasjon.telefonnummer == 'phone'
-        form.innsender.organisasjon.epost == 'email'
-        form.innsender.organisasjon.fylke == 'Viken'
-        form.innsender.organisasjon.fylkenummer == '30'
-        form.innsender.language == '1044'
+        form.submitter.organisation.organisationNumber == '123456789'
+        form.submitter.organisation.name == 'Taxi AS'
+        form.submitter.organisation.businessAddress.address == 'address'
+        form.submitter.organisation.businessAddress.postCode == 'post-code'
+        form.submitter.organisation.businessAddress.postalArea == 'postal-area'
+        form.submitter.organisation.phone == 'phone'
+        form.submitter.organisation.email == 'email'
+        form.submitter.organisation.county == 'Viken'
+        form.submitter.organisation.countyNumber == '30'
+        form.submitter.language == '1044'
     }
 }

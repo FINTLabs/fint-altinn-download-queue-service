@@ -6,7 +6,7 @@ import no.altinn.downloadqueue.wsdl.ArchivedFormTaskDQBE;
 import no.altinn.downloadqueue.wsdl.DownloadQueueItemBE;
 import no.fint.downloadqueue.client.DownloadQueueClient;
 import no.fint.downloadqueue.exception.AltinnFaultException;
-import no.fint.downloadqueue.model.AltinnApplicationFactory;
+import no.fint.downloadqueue.factory.AltinnApplicationFactory;
 import no.fint.downloadqueue.model.AltinnApplication;
 import no.fint.downloadqueue.model.AltinnApplicationStatus;
 import no.fint.downloadqueue.repository.AltinnApplicationRepository;

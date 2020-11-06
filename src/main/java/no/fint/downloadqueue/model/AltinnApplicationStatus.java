@@ -1,5 +1,5 @@
 package no.fint.downloadqueue.model;
 
 public enum AltinnApplicationStatus {
-    NEW, CONSENTS_REQUESTED, CONSENTS_ACCEPTED, ARCHIVED, PURGED
+    NEW, DATA_MISSING, CONSENTS_REQUESTED, CONSENTS_ACCEPTED, ARCHIVED, PURGED
 }

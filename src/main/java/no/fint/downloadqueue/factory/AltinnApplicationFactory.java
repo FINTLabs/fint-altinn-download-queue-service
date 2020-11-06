@@ -1,7 +1,14 @@
-package no.fint.downloadqueue.model;
+package no.fint.downloadqueue.factory;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.extern.slf4j.Slf4j;
 import no.altinn.downloadqueue.wsdl.*;
+import no.fint.downloadqueue.model.AltinnApplication;
+import no.fint.downloadqueue.model.AltinnApplicationStatus;
+import no.fint.downloadqueue.model.AltinnForm;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.InvalidMediaTypeException;
 import org.springframework.http.MediaType;
@@ -17,14 +24,9 @@ import java.util.stream.Stream;
 
 @Slf4j
 public class AltinnApplicationFactory {
-    private final static String REQUESTOR = "fylkesnummer";
-    private final static String REQUESTOR_NAME = "fylke";
-    private final static String SUBJECT_NAME = "innsender";
-    private final static String LANGUAGE_CODE = "language";
-    private final static Integer DEFAULT_LANGUAGE_CODE = 1044;
+    private static final ObjectMapper objectMapper = new XmlMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-    public AltinnApplicationFactory() {
-    }
+    private final static Integer DEFAULT_LANGUAGE_CODE = 1044;
 
     public static AltinnApplication of(DownloadQueueItemBE item, ArchivedFormTaskDQBE archivedFormTask) {
         AltinnApplication altinnApplication = new AltinnApplication();
@@ -34,7 +36,11 @@ public class AltinnApplicationFactory {
                 .andThen(addAttachments(archivedFormTask))
                 .accept(altinnApplication);
 
-        altinnApplication.setStatus(AltinnApplicationStatus.NEW);
+        if (altinnApplication.getRequestor().isEmpty()) {
+            altinnApplication.setStatus(AltinnApplicationStatus.DATA_MISSING);
+        } else {
+            altinnApplication.setStatus(AltinnApplicationStatus.NEW);
+        }
 
         return altinnApplication;
     }
@@ -46,14 +52,6 @@ public class AltinnApplicationFactory {
             application.setServiceCode(item.getServiceCode().getValue());
 
             getDateTime(item.getArchivedDate()).ifPresent(application::setArchivedDate);
-
-            ArchivedShipmentMetadataList metadata = item.getShipmentMetadataList().getValue();
-
-            getMetadata(metadata, REQUESTOR).map(countyNumberMapping::get).ifPresent(application::setRequestor);
-            getMetadata(metadata, REQUESTOR_NAME).ifPresent(application::setRequestorName);
-            getMetadata(metadata, SUBJECT_NAME).ifPresent(application::setSubjectName);
-
-            application.setLanguageCode(getMetadata(metadata, LANGUAGE_CODE).map(Integer::parseInt).orElse(DEFAULT_LANGUAGE_CODE));
         };
     }
 
@@ -68,7 +66,44 @@ public class AltinnApplicationFactory {
                 .ifPresent(archivedForm -> {
                     AltinnApplication.Form form = new AltinnApplication.Form();
 
-                    form.setFormData(archivedForm.getFormData().getValue());
+                    String formData = archivedForm.getFormData().getValue();
+
+                    form.setFormData(formData);
+
+                    try {
+                        AltinnForm altinnForm = objectMapper.readValue(archivedForm.getFormData().getValue(), AltinnForm.class);
+                        Optional.ofNullable(altinnForm)
+                                .map(AltinnForm::getInnsender)
+                                .map(submitter -> {
+                                    Integer languageCode = Optional.ofNullable(submitter.getLanguage()).map(Integer::parseInt).orElse(DEFAULT_LANGUAGE_CODE);
+                                    altinnApplication.setLanguageCode(languageCode);
+
+                                    return submitter;
+                                })
+                                .map(AltinnForm.Innsender::getOrganisasjon)
+                                .ifPresent(organisation -> {
+                                    String requestor = countyNumberMapping.getOrDefault(organisation.getFylkenummer(), "");
+
+                                    altinnApplication.setRequestor(requestor);
+                                    altinnApplication.setRequestorName(organisation.getFylke());
+                                    altinnApplication.setSubjectName(organisation.getNavn());
+                                    altinnApplication.setPhone(organisation.getTelefonnummer());
+                                    altinnApplication.setEmail(organisation.getEpost());
+
+                                    AltinnApplication.Address businessAddress = new AltinnApplication.Address();
+                                    Optional.ofNullable(organisation.getForretningsadresse())
+                                            .ifPresent(address -> {
+                                                businessAddress.setAddress(address.getAdresse());
+                                                businessAddress.setPostCode(address.getPostnummer());
+                                                businessAddress.setPostalArea(address.getPoststed());
+                                            });
+
+                                    altinnApplication.setBusinessAddress(businessAddress);
+                                });
+
+                    } catch (JsonProcessingException e) {
+                        log.warn("Error reading form data of archive reference {}", archivedForm.getReference());
+                    }
 
                     altinnApplication.setForm(form);
                 });
@@ -107,17 +142,6 @@ public class AltinnApplicationFactory {
 
                     altinnApplication.getAttachments().put(attachment.getAttachmentId(), attachment);
                 });
-    }
-
-    private static Optional<String> getMetadata(ArchivedShipmentMetadataList metadataList, String key) {
-        return Optional.ofNullable(metadataList)
-                .map(ArchivedShipmentMetadataList::getArchivedShipmentMetadata)
-                .orElseGet(Collections::emptyList)
-                .stream()
-                .filter(metadata -> metadata.getKey().getValue().equals(key))
-                .map(ArchivedShipmentMetadata::getValue)
-                .map(JAXBElement::getValue)
-                .findAny();
     }
 
     private static Optional<LocalDateTime> getDateTime(XMLGregorianCalendar dateTime) {

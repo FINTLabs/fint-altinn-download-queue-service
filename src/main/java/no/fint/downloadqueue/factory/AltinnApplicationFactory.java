@@ -37,7 +37,7 @@ public class AltinnApplicationFactory {
                 .accept(altinnApplication);
 
         if (altinnApplication.getRequestor() == null) {
-            altinnApplication.setStatus(AltinnApplicationStatus.DATA_MISSING);
+            altinnApplication.setStatus(AltinnApplicationStatus.REQUESTOR_MISSING);
         } else {
             altinnApplication.setStatus(AltinnApplicationStatus.NEW);
         }

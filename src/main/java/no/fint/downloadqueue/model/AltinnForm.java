@@ -19,9 +19,6 @@ public class AltinnForm {
 
     @Data
     public static class Organisation {
-        @JacksonXmlProperty(localName = "organisasjonsnummer")
-        private String organisationNumber;
-
         @JacksonXmlProperty(localName = "navn")
         private String name;
 

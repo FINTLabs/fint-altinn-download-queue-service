@@ -50,7 +50,6 @@ class AltinnApplicationFactorySpec extends Specification {
                 .readValue(DownloadQueueObjectFactory.newFormData(), AltinnForm.class)
 
         then:
-        form.submitter.organisation.organisationNumber == '123456789'
         form.submitter.organisation.name == 'Taxi AS'
         form.submitter.organisation.businessAddress.address == 'address'
         form.submitter.organisation.businessAddress.postCode == 'post-code'

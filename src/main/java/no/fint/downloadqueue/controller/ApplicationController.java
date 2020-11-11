@@ -2,7 +2,9 @@ package no.fint.downloadqueue.controller;
 
 import no.fint.downloadqueue.client.DownloadQueueClient;
 import no.fint.downloadqueue.exception.AltinnFaultException;
+import no.fint.downloadqueue.util.AltinnFaultPretty;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,13 +21,10 @@ public class ApplicationController {
         return downloadQueueClient.getFormSetPdf(archiveReference, languageCode);
     }
 
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ExceptionHandler(AltinnFaultException.class)
-    public void notFound() {
-    }
+    public ResponseEntity<AltinnFaultPretty> altinnFaultException(AltinnFaultException altinnFaultException) {
+        AltinnFaultPretty altinnFaultPretty = AltinnFaultPretty.of(altinnFaultException.getAltinnFault());
 
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(Exception.class)
-    public void badRequest() {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(altinnFaultPretty);
     }
 }

@@ -1,7 +1,6 @@
 package no.fint.downloadqueue.service;
 
 import lombok.extern.slf4j.Slf4j;
-import no.altinn.downloadqueue.wsdl.AltinnFault;
 import no.altinn.downloadqueue.wsdl.ArchivedFormTaskDQBE;
 import no.altinn.downloadqueue.wsdl.DownloadQueueItemBE;
 import no.fint.downloadqueue.client.DownloadQueueClient;
@@ -9,6 +8,7 @@ import no.fint.downloadqueue.exception.AltinnFaultException;
 import no.fint.downloadqueue.factory.AltinnApplicationFactory;
 import no.fint.downloadqueue.model.AltinnApplication;
 import no.fint.downloadqueue.model.AltinnApplicationStatus;
+import no.fint.downloadqueue.util.AltinnFaultPretty;
 import no.fint.downloadqueue.repository.AltinnApplicationRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -40,7 +40,7 @@ public class AltinnApplicationService {
         try {
             downloadQueueItems = downloadQueueClient.getDownloadQueueItems();
         } catch (AltinnFaultException ex) {
-            log.error(altinnFaultToString(ex.getAltinnFault()));
+            log.error("{}", AltinnFaultPretty.of(ex.getAltinnFault()));
             return;
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
@@ -69,9 +69,9 @@ public class AltinnApplicationService {
                     log.info("Created from archive reference: {}", archiveReference);
                 });
             } catch (AltinnFaultException ex) {
-                log.error(altinnFaultToString(ex.getAltinnFault()));
+                log.error(archiveReference + " - {}", AltinnFaultPretty.of(ex.getAltinnFault()));
             } catch (Exception ex) {
-                log.error(ex.getMessage(), ex);
+                log.error(archiveReference, ex);
             }
         });
     }
@@ -93,23 +93,10 @@ public class AltinnApplicationService {
                     log.info("Purged from archive reference: {}", application.getArchiveReference());
                 }
             } catch (AltinnFaultException ex) {
-                log.error(altinnFaultToString(ex.getAltinnFault()));
+                log.error(application.getArchiveReference() + "- {}", AltinnFaultPretty.of(ex.getAltinnFault()));
             } catch (Exception ex) {
-                log.error(ex.getMessage(), ex);
+                log.error(application.getArchiveReference(), ex);
             }
         });
-    }
-
-    private String altinnFaultToString(AltinnFault altinnFault) {
-        return Optional.ofNullable(altinnFault)
-                .map(fault -> '\n' +
-                        "AltinnErrorMessage: " + fault.getAltinnErrorMessage().getValue() + '\n' +
-                        "AltinnExtendedErrorMessage: " + fault.getAltinnExtendedErrorMessage().getValue() + '\n' +
-                        "AltinnLocalizedErrorMessage: " + fault.getAltinnLocalizedErrorMessage().getValue() + '\n' +
-                        "ErrorGuid: " + fault.getErrorGuid().getValue() + '\n' +
-                        "ErrorID: " + fault.getErrorID() + '\n' +
-                        "UserGuid: " + fault.getUserGuid().getValue() + '\n' +
-                        "UserId: " + fault.getUserId().getValue())
-                .orElse("An error occurred");
     }
 }

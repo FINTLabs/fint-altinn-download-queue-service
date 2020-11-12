@@ -25,7 +25,7 @@ class DownloadQueueObjectFactory {
         return new DownloadQueueItemBE(
                 archiveReference: objectFactory.createDownloadQueueItemBEArchiveReference('archive-reference'),
                 archivedDate: newArchivedDate(),
-                reporteeID: objectFactory.createDownloadQueueItemBEReporteeID('reportee-id'),
+                reporteeID: objectFactory.createDownloadQueueItemBEReporteeID('123456789'),
                 reporteeType: DownloadQueueReporteeType.ORGANISATION,
                 serviceCode: objectFactory.createDownloadQueueItemBEServiceCode('service-code'),
                 serviceEditionCode: 0,
@@ -74,7 +74,7 @@ class DownloadQueueObjectFactory {
                 archivedFormDQBE: [
                         new ArchivedFormDQBE(
                                 reference: objectFactory.createArchivedFormDQBEReference('reference'),
-                                formData: objectFactory.createArchivedFormDQBEFormData('<xml>'),
+                                formData: objectFactory.createArchivedFormDQBEFormData(newFormData()),
                         )
                 ]
         )
@@ -113,5 +113,47 @@ class DownloadQueueObjectFactory {
         ZonedDateTime dateTime = ZonedDateTime.parse('2020-01-01T00:00:30Z')
         GregorianCalendar calendar = GregorianCalendar.from(dateTime)
         return DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar)
+    }
+
+    static newFormData() {
+        return '<melding xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n' +
+                '    xmlns:ns2="http://schemas.microsoft.com/2003/10/Serialization/" dataFormatProvider="SERES" dataFormatId="1" dataFormatVersion="2">\n' +
+                '    <Innsender>\n' +
+                '        <Organisasjon>\n' +
+                '            <organisasjonsnummer>123456789</organisasjonsnummer>\n' +
+                '            <navn>Taxi AS</navn>\n' +
+                '            <opprettet>2016-10-18T00:00:00</opprettet>\n' +
+                '            <Forretningsadresse>\n' +
+                '                <adresse>address</adresse>\n' +
+                '                <postnummer>post-code</postnummer>\n' +
+                '                <poststed>postal-area</poststed>\n' +
+                '            </Forretningsadresse>\n' +
+                '            <Postadresse></Postadresse>\n' +
+                '            <telefonnummer>phone</telefonnummer>\n' +
+                '            <epost>email</epost>\n' +
+                '            <kommunenummer>kommunenummer</kommunenummer>\n' +
+                '            <kommunenavn>kommunenavn</kommunenavn>\n' +
+                '            <fylke>Viken</fylke>\n' +
+                '            <fylkenummer>30</fylkenummer>\n' +
+                '        </Organisasjon>\n' +
+                '        <antalldrosjeloeyver>1</antalldrosjeloeyver>\n' +
+                '        <language>1044</language>\n' +
+                '    </Innsender>\n' +
+                '    <Innhold>\n' +
+                '        <DagligLeder>\n' +
+                '            <foedselnummer>foedselnummer</foedselnummer>\n' +
+                '            <fornavn>fornavn</fornavn>\n' +
+                '            <etternavn>etternavn</etternavn>\n' +
+                '            <epostadresse>epostadresse</epostadresse>\n' +
+                '            <telefonnummer>telefonnummer</telefonnummer>\n' +
+                '        </DagligLeder>\n' +
+                '        <annenTransportleder>Nei</annenTransportleder>\n' +
+                '        <Transportleder></Transportleder>\n' +
+                '        <bekreftelseForTransportleder>Ja</bekreftelseForTransportleder>\n' +
+                '        <beskrivTransportledersTilknytning>Ja</beskrivTransportledersTilknytning>\n' +
+                '        <bekreftSamtykkeForetak>Ja</bekreftSamtykkeForetak>\n' +
+                '        <bekreftBehandlingForetak>Ja</bekreftBehandlingForetak>\n' +
+                '    </Innhold>\n' +
+                '</melding>'
     }
 }

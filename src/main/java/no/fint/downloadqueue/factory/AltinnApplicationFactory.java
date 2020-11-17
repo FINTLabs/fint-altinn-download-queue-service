@@ -135,7 +135,7 @@ public class AltinnApplicationFactory {
                     String fileExtension = StringUtils.substringAfterLast(archivedAttachment.getFileName().getValue(), ".");
 
                     if (fileExtension.isEmpty()) {
-                        log.warn("Missing file extension for attachment {} of archive reference {}", attachment.getAttachmentId(), archivedAttachment.getArchiveReference());
+                        log.warn("Missing file extension for attachment {} of archive reference {}", attachment.getAttachmentId(), archivedAttachment.getArchiveReference().getValue());
                         fileExtension = "taxi";
                     }
 

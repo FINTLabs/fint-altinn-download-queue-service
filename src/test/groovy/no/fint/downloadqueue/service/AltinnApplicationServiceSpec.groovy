@@ -2,8 +2,8 @@ package no.fint.downloadqueue.service
 
 import no.altinn.downloadqueue.wsdl.DownloadQueueItemBE
 import no.altinn.downloadqueue.wsdl.ObjectFactory
+import no.fint.altinn.model.AltinnApplication
 import no.fint.downloadqueue.client.DownloadQueueClient
-import no.fint.downloadqueue.model.AltinnApplication
 import no.fint.downloadqueue.repository.AltinnApplicationRepository
 import no.fint.downloadqueue.util.DownloadQueueObjectFactory
 import spock.lang.Specification

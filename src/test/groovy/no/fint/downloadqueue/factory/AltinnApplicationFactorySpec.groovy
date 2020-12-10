@@ -2,8 +2,8 @@ package no.fint.downloadqueue.factory
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
-import no.fint.downloadqueue.model.AltinnApplicationStatus
-import no.fint.downloadqueue.model.AltinnForm
+import no.fint.altinn.model.AltinnApplicationStatus
+import no.fint.altinn.model.AltinnForm
 import no.fint.downloadqueue.util.DownloadQueueObjectFactory
 import spock.lang.Specification
 

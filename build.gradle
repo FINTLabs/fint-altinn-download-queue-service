@@ -15,7 +15,7 @@ configurations {
 
 repositories {
 	mavenCentral()
-	maven { url "https://dl.bintray.com/fint/maven" }
+	maven { url "https://repo.fintlabs.no/releases" }
 }
 
 task genJaxb {
@@ -85,7 +85,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'no.fint:fint-altinn-model:1.0.0-alpha-3'
+	implementation 'no.fint:fint-altinn-model:1.0.1'
 
 	implementation 'org.apache.commons:commons-lang3'
 	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml'

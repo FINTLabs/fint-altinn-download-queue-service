@@ -8,3 +8,9 @@ altinn:
   system-password: password
   download-queue-uri: https://www.altinn.no/ArchiveExternal/DownloadQueueExternalBasic.svc
   attachment-data-streamed-uri: https://www.altinn.no/ArchiveExternal/ServiceOwnerArchiveExternalStreamedBasic.svc
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, shutdown, prometheus

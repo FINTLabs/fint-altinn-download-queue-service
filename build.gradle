@@ -85,7 +85,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation('io.micrometer:micrometer-registry-prometheus')
-	implementation 'no.fint:fint-altinn-model:1.0.1'
+	implementation 'no.fint:fint-altinn-model:1.0.2'
 
 	implementation 'org.apache.commons:commons-lang3'
 	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml'

@@ -13,3 +13,9 @@ spring:
   data:
     mongodb:
       database: altinn-test
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, shutdown, prometheus

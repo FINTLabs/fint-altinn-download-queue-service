@@ -94,7 +94,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 
 	compile(files(genJaxb.downloadQueueClassesDir, genJaxb.attachmentDataStreamedClassessDir).builtBy(genJaxb))
-	jaxb 'com.sun.xml.bind:jaxb-xjc:2.1.7'
+	jaxb 'com.sun.xml.bind:jaxb-xjc:2.3.8'
 
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'

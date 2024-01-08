@@ -154,15 +154,22 @@ public class AltinnApplicationFactory {
 
     private static final Map<String, String> countyNumberMapping = Stream.of(
             new AbstractMap.SimpleImmutableEntry<>("30", "921693230"), //Viken
+            new AbstractMap.SimpleImmutableEntry<>("31", "930580694"), //Østfold
+            new AbstractMap.SimpleImmutableEntry<>("32", "930580783"), //Akershus
+            new AbstractMap.SimpleImmutableEntry<>("33", "930580260"), //Buskerud
             new AbstractMap.SimpleImmutableEntry<>("03", "958935420"), //Oslo
             new AbstractMap.SimpleImmutableEntry<>("34", "920717152"), //Innlandet
             new AbstractMap.SimpleImmutableEntry<>("38", "821227062"), //Vestfold og Telemark
+            new AbstractMap.SimpleImmutableEntry<>("39", "929882385"), //Vestfold
+            new AbstractMap.SimpleImmutableEntry<>("40", "929882989"), //Telemark
             new AbstractMap.SimpleImmutableEntry<>("42", "921707134"), //Agder
             new AbstractMap.SimpleImmutableEntry<>("11", "971045698"), //Rogaland
             new AbstractMap.SimpleImmutableEntry<>("46", "821311632"), //Vestland
             new AbstractMap.SimpleImmutableEntry<>("15", "944183779"), //Møre og Romsdal
             new AbstractMap.SimpleImmutableEntry<>("50", "817920632"), //Trøndelang
             new AbstractMap.SimpleImmutableEntry<>("18", "964982953"), //Nordland
-            new AbstractMap.SimpleImmutableEntry<>("54", "922420866")) //Troms og Finnmark
+            new AbstractMap.SimpleImmutableEntry<>("54", "922420866"), //Troms og Finnmark
+            new AbstractMap.SimpleImmutableEntry<>("55", "930068128"), //Troms
+            new AbstractMap.SimpleImmutableEntry<>("56", "830090282")) //Finnmark
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 }

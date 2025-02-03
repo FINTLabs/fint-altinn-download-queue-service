@@ -30,7 +30,7 @@ jobs:
             type=sha,prefix={{date 'YYYY-MM-DD-'}},enable={{is_default_branch}}
             type=raw,value=latest,enable={{is_default_branch}}
       - name: Login to ACR
-        uses: Azure/docker-login@v1
+        uses: Azure/docker-login@v2
         if: github.actor != 'dependabot[bot]'
         with:
           login-server: fintlabsacr.azurecr.io

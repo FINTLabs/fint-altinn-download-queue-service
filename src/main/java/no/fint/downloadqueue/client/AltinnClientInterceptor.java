@@ -6,7 +6,7 @@ import org.springframework.ws.client.WebServiceClientException;
 import org.springframework.ws.context.MessageContext;
 import org.springframework.ws.soap.*;
 
-import javax.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBElement;
 import javax.xml.transform.Source;
 import java.util.Optional;
 

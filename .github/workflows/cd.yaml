@@ -18,7 +18,7 @@ jobs:
       DOCKER_BUILDKIT: 1
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
@@ -30,14 +30,14 @@ jobs:
             type=sha,prefix={{date 'YYYY-MM-DD-'}},enable={{is_default_branch}}
             type=raw,value=latest,enable={{is_default_branch}}
       - name: Login to ACR
-        uses: Azure/docker-login@v1
+        uses: Azure/docker-login@v2
         if: github.actor != 'dependabot[bot]'
         with:
           login-server: fintlabsacr.azurecr.io
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - name: Build and push
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           push: ${{ github.actor != 'dependabot[bot]' }}
           tags: ${{ steps.meta.outputs.tags }}

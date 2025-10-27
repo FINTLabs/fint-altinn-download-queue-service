@@ -131,5 +131,5 @@ dependencies {
 	}
 	testImplementation 'org.springframework.ws:spring-ws-test'
 	testImplementation 'org.spockframework:spock-spring:2.4-M6-groovy-4.0'
-	testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring3x:4.20.0'
+	testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo.spring3x:4.21.0'
 }

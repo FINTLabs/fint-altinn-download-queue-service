@@ -113,7 +113,7 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
-    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.2'
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.5'
     implementation 'org.glassfish.jaxb:jaxb-runtime:4.0.6'
     implementation 'com.sun.activation:jakarta.activation:2.0.1'
 
@@ -121,7 +121,7 @@ dependencies {
 			genJaxb.attachmentDataStreamedClassessDir)
 			.builtBy(genJaxb))
 
-    jaxb 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.2'
+    jaxb 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.5'
     jaxb 'org.glassfish.jaxb:jaxb-runtime:4.0.6'
     jaxb 'org.glassfish.jaxb:jaxb-xjc:4.0.6'
     jaxb 'com.sun.activation:jakarta.activation:2.0.1'
